@@ -1,0 +1,14 @@
+# Core
+pandas>=2.2.0
+pyyaml>=6.0
+numpy
+matplotlib
+pydantic
+tqdm
+
+# Agentic / LLM (added later)
+openai
+streamlit
+fastapi
+uvicorn
+faiss-cpu
