@@ -5,6 +5,11 @@ numpy
 matplotlib
 pydantic
 tqdm
+rapidfuzz
+python-dotenv
+jellyfish
+metaphone
+sentence-transformers
 
 # Agentic / LLM (added later)
 openai
