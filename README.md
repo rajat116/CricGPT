@@ -42,7 +42,8 @@ This step adds **analytical logic** for batters and bowlers, separating data ret
 ### Functions
 
 ```python
-from cricket_tools.stats import get_player_stats, get_bowler_stats```
+from cricket_tools.stats import get_player_stats, get_bowler_stats
+```
 
 ## Step 4 — ML Prediction Integration (`ml_build.py`, `ml_model.py`, `core.py`)
 
