@@ -1,0 +1,20 @@
+{
+  "created_at": "2025-11-03T15:39:37.372564Z",
+  "model_path": "models/performance_model.pkl",
+  "feature_cols": [
+    "balls",
+    "dismissals",
+    "fours",
+    "sixes",
+    "strike_rate",
+    "avg"
+  ],
+  "target_col": "runs_per_match",
+  "metrics": {
+    "mse": 22.239993006509764,
+    "rmse": 4.715929707545455,
+    "n_train": 528,
+    "n_test": 176
+  },
+  "sklearn_model": "RandomForestRegressor"
+}

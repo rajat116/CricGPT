@@ -10,6 +10,7 @@ python-dotenv
 jellyfish
 metaphone
 sentence-transformers
+xgboost
 
 # Agentic / LLM (added later)
 openai
