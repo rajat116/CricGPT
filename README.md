@@ -24,8 +24,9 @@ resolver that can understand partial, misspelled, or ambiguous inputs.
 ### Example Usage
 ```python
 from cricket_tools.smart_names import resolve_player_smart
-print(resolve_player_smart("Rohitt Sharm"))'''
-# ('Rohit Gurunath Sharma', 'confirm', 'Did you mean **Rohit Gurunath Sharma**? If not maybe: Mohit Mahipal Sharma, Rahul Sharma.')
+print(resolve_player_smart("Rohitt Sharm"))
+''' ('Rohit Gurunath Sharma', 'confirm', 'Did you mean **Rohit Gurunath Sharma**? If not maybe: Mohit Mahipal Sharma, Rahul Sharma.')'''
+```
 
 ### Step 3 — Player Stats & Role Handlers (`stats.py`, `filters.py`)
 
@@ -76,4 +77,4 @@ Build features:
 
 ```bash
 python -m cricket_tools.ml_build
-
+```
