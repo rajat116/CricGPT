@@ -18,6 +18,7 @@ PARQUET_PATH = Path("data/processed/ipl_deliveries.parquet")
 _SEM_HIGH = 0.92      # strong, auto-OK
 _SEM_MID = 0.87       # good, confirm
 _SEM_MARGIN = 0.05    # min lead over #2 for confident OK
+_FUZZY_MARGIN = 10.0  # min lead for fuzzy score
 
 # ---------------------------------------------------------------------
 # Data structures
@@ -37,7 +38,7 @@ class ResolveResult:
     ask_hint: Optional[str]
 
 # ---------------------------------------------------------------------
-# Utility helpers
+# Utility helpers (no changes)
 def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.strip().lower().replace(".", "").replace("_", " "))
 
@@ -77,7 +78,7 @@ def _jaccard(a: List[str], b: List[str]) -> float:
     return len(sa & sb) / len(sa | sb)
 
 # ---------------------------------------------------------------------
-# Semantic reranker
+# Semantic reranker (no changes)
 _embed_model = SentenceTransformer("thenlper/gte-small")
 
 def semantic_rerank(query: str, candidates: list[str], top_k: int = 5):
@@ -125,6 +126,7 @@ class SmartNameResolver:
         self._exact_map = {n: ds for n, ds in zip(self.df["norm_canon"], self.df["dataset_name"])}
 
     # ----------------------------------------------------------
+    # _score method (no changes)
     def _score(self, query: str, row: pd.Series) -> Tuple[float, List[str]]:
         q_norm = _norm(query)
         q_tokens = _tokens(query)
@@ -164,6 +166,68 @@ class SmartNameResolver:
         return score, reasons
 
     # ----------------------------------------------------------
+    # _rank method (no changes)
+    def _rank(self, query: str, frame: pd.DataFrame) -> List[Candidate]:
+        scored = []
+        for _, row in frame.iterrows():
+            sc, rs = self._score(query, row)
+            scored.append(Candidate(row["dataset_name"], row["canonical_name"], sc, rs))
+        scored.sort(key=lambda c: c.score, reverse=True)
+        return scored
+    
+    # ----------------------------------------------------------
+    # NEW: Centralized ambiguity "brain"
+    # ----------------------------------------------------------
+    def _process_semantic_results(
+        self, 
+        query: str, 
+        sem_list: list[tuple[str, float]], 
+        rule_candidates: list[Candidate],
+        method: str = "semantic"
+    ) -> ResolveResult:
+        """
+        Processes a list of semantic scores to check for ambiguity.
+        This is the "full proof" logic.
+        """
+        if not sem_list:
+            # Semantic rerank failed, fall back to rule-based ambiguity
+            hint = "Multiple players found. Can you be more specific?"
+            return ResolveResult("ambiguous", "rule", None, rule_candidates[:5], hint)
+
+        best_name, best_sim = sem_list[0]
+
+        # --- This is the key "full proof" logic ---
+        if len(sem_list) > 1:
+            second_sim = sem_list[1][1]
+            sim_diff = best_sim - second_sim
+
+            # If the top 2 (or more) are too close, it's ambiguous
+            if sim_diff < _SEM_MARGIN:
+                close_options = [n for n, s in sem_list[:3] if (best_sim - s) < _SEM_MARGIN]
+                hint = f"Your query '{query}' is ambiguous. Did you mean: {', '.join(f'**{n}**' for n in close_options)}?"
+                
+                ambig_candidates = []
+                for name in close_options:
+                    ds = self.df.loc[self.df["canonical_name"] == name, "dataset_name"].values[0]
+                    score = next(s for n, s in sem_list if n == name) * 100
+                    ambig_candidates.append(Candidate(ds, name, score, [f"{method}_ambiguous"]))
+                
+                # Return AMBIGUOUS, not confirm
+                return ResolveResult("ambiguous", method, None, ambig_candidates, hint)
+        # --- End of key logic ---
+
+        # If we're here, the #1 result is a clear winner
+        # We still return "confirm" because it's not an exact match.
+        ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
+        best = Candidate(ds_name, best_name, best_sim * 100, [method])
+        alt_names = [n for n, _ in sem_list[1:4] if n != best_name]
+        hint = f"Did you mean **{best_name}**?{f' Or maybe: {", ".join(alt_names)}' if alt_names else ''}."
+        
+        return ResolveResult("confirm", method, best, [best], hint)
+
+    # ----------------------------------------------------------
+    # MODIFIED: Main resolve method
+    # ----------------------------------------------------------
     def resolve(self, query: str) -> ResolveResult:
         q = query or ""
         q_norm, q_tokens = _norm(q), _tokens(q)
@@ -171,6 +235,7 @@ class SmartNameResolver:
             return ResolveResult("not_found", "rule", None, [], "Please provide a player name.")
 
         # --- 1️⃣ Exact match ---
+        # This is the *only* case that returns "ok"
         exact_ds = self._exact_map.get(q_norm)
         if exact_ds:
             row = self.df.loc[self.df["dataset_name"] == exact_ds].iloc[0]
@@ -187,131 +252,150 @@ class SmartNameResolver:
                 row = matches.iloc[0]
                 sc, rs = self._score(query, row)
                 best = Candidate(row["dataset_name"], row["canonical_name"], sc, rs)
-                return ResolveResult("ok", "token", best, [best], None)
+                hint = f"Did you mean **{best.canonical_name}**?"
+                return ResolveResult("confirm", "token", best, [best], hint)
 
             if len(matches) > 1:
                 ranked = self._rank(query, matches)
                 cand_names = [c.canonical_name for c in ranked[:10]]
                 sem = semantic_rerank(query, cand_names)
-                print(f"[Semantic disambiguation #2] {query=} → {sem[:5]}")
-                best_name, best_sim = sem[0]
-                alt_names = [n for n, _ in sem[1:4]]
-                ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
-                best = Candidate(ds_name, best_name, best_sim * 100, ["semantic_disambig"])
-
-                # Single token: always confirm, never auto-OK unless difference huge
-                if (best_sim >= _SEM_HIGH) and (best_sim - sem[1][1] > 0.10):
-                    return ResolveResult("ok", "semantic", best, [best], None)
-                hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                return ResolveResult("confirm", "semantic", best, [best], hint)
+                
+                # MODIFIED: Call the new centralized "brain"
+                sem_result = self._process_semantic_results(query, sem, ranked)
+                
+                # Special case for "Sharma" (too many rule-based matches)
+                # If it wasn't already ambiguous, make it ambiguous due to count
+                if len(matches) > 5 and sem_result.status != "ambiguous":
+                    hint = f"Found {len(matches)} players matching '{query}'. Can you provide a first name or initials? (e.g., {', '.join([c.canonical_name for c in ranked[:3]])}, ...)"
+                    return ResolveResult("ambiguous", "rule_count", sem_result.best, ranked[:5], hint)
+                    
+                return sem_result # This will be the "ambiguous" or "confirm" result
 
             # semantic rescue for typos like "Rohitt"
-            sem = semantic_rerank(query, self.df["canonical_name"].tolist())
-            if sem:
-                best_name, best_sim = sem[0]
-                alt_names = [n for n, _ in sem[1:4]]
-                if best_sim > _SEM_MID:
-                    ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
-                    best = Candidate(ds_name, best_name, best_sim * 100, ["semantic_rescue"])
-                    if (best_sim >= _SEM_HIGH) and (best_sim - sem[1][1] > _SEM_MARGIN):
-                        return ResolveResult("ok", "semantic", best, [best], None)
-                    hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                    return ResolveResult("confirm", "semantic", best, [best], hint)
+            # MODIFIED: Use the ambiguity-aware logic here too
+            sem = semantic_rerank(query, self._canon_names)
+            if sem and sem[0][1] > _SEM_MID: # Check if best score is decent
+                # Pass an empty list for rule_candidates
+                return self._process_semantic_results(query, sem, [], method="semantic_rescue")
 
         # --- 3️⃣ Initials + surname ---
         if len(q_tokens) >= 2:
             qs = q_tokens[-1]
             mask_surn = (self.df["canon_surname"] == qs) | (self.df["canon_surn_mp"] == _metaphone(qs)[0])
             cand = self.df[mask_surn]
+            
             if len(cand) == 1:
                 row = cand.iloc[0]
                 sc, rs = self._score(query, row)
                 best = Candidate(row["dataset_name"], row["canonical_name"], sc, rs)
-                return ResolveResult("ok", "initials", best, [best], None)
+                hint = f"Did you mean **{best.canonical_name}**?"
+                return ResolveResult("confirm", "initials", best, [best], hint)
 
             if len(cand) > 1:
                 ranked = self._rank(query, cand)
+                # ... (surname-priority filter logic is good) ...
+                if len(q_tokens) >= 2:
+                    surname = q_tokens[-1]
+                    firstname = q_tokens[0]
+                    same_surn = [c for c in ranked if surname.lower() in _norm(c.canonical_name)]
+                    if same_surn:
+                        same_surn_first = [c for c in same_surn if firstname.lower() in _norm(c.canonical_name)]
+                        if same_surn_first:
+                            ranked = same_surn_first
+                        else:
+                            ranked = same_surn
+                
                 cand_names = [c.canonical_name for c in ranked[:10]]
                 sem = semantic_rerank(query, cand_names)
                 print(f"[Semantic rerank #3] {query=} → {sem[:5]}")
-                best_name, best_sim = sem[0]
-                alt_names = [n for n, _ in sem[1:4]]
-                ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
-                best = Candidate(ds_name, best_name, best_sim * 100, ["semantic"])
-                if (best_sim >= _SEM_HIGH) and (best_sim - sem[1][1] > _SEM_MARGIN):
-                    return ResolveResult("ok", "semantic", best, [best], None)
-                if best_sim >= _SEM_MID:
-                    hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                    return ResolveResult("confirm", "semantic", best, [best], hint)
-                hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                return ResolveResult("ambiguous", "semantic", None, ranked[:10], hint)
+                
+                # MODIFIED: Call the new centralized "brain"
+                return self._process_semantic_results(query, sem, ranked)
 
         # --- 4️⃣ Token overlap ---
         tok_mask = self.df["canon_tokens"].apply(lambda ts: bool(set(q_tokens) & set(ts)))
         tok_cand = self.df[tok_mask]
         if not tok_cand.empty:
             ranked = self._rank(query, tok_cand)
+            # ... (surname-priority filter logic is good) ...
+            if len(q_tokens) >= 2:
+                surname = q_tokens[-1]
+                firstname = q_tokens[0]
+                same_surn = [c for c in ranked if surname.lower() in _norm(c.canonical_name)]
+                if same_surn:
+                    same_surn_first = [c for c in same_surn if firstname.lower() in _norm(c.canonical_name)]
+                    if same_surn_first:
+                        ranked = same_surn_first
+                    else:
+                        ranked = same_surn
+            
             cand_names = [c.canonical_name for c in ranked[:10]]
             sem = semantic_rerank(query, cand_names)
             print(f"[Semantic rerank #4] {query=} → {sem[:5]}")
-            best_name, best_sim = sem[0]
-            alt_names = [n for n, _ in sem[1:4]]
-            ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
-            best = Candidate(ds_name, best_name, best_sim * 100, ["semantic"])
-            if (best_sim >= _SEM_HIGH) and (best_sim - sem[1][1] > _SEM_MARGIN):
-                return ResolveResult("ok", "semantic", best, [best], None)
-            if best_sim >= _SEM_MID:
-                hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                return ResolveResult("confirm", "semantic", best, [best], hint)
-            hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-            return ResolveResult("ambiguous", "semantic", None, ranked[:10], hint)
+            
+            # MODIFIED: Call the new centralized "brain"
+            return self._process_semantic_results(query, sem, ranked)
 
         # --- 5️⃣ Fuzzy fallback ---
+        # MODIFIED: Made this step ambiguity-aware
         try:
-            best_name, fr, _ = process.extractOne(q_norm, self._canon_names, scorer=fuzz.WRatio)
+            # Get top 2 candidates
+            fuzzy_matches = process.extract(q_norm, self._canon_names, scorer=fuzz.WRatio, limit=2)
         except Exception:
-            best_name, fr = None, 0
-        if best_name and fr >= 75:
-            row = self.df.loc[self.df["canonical_name"] == best_name].iloc[0]
-            sc, rs = self._score(query, row)
-            best = Candidate(row["dataset_name"], row["canonical_name"], sc, rs)
-            return ResolveResult("ok", "fuzzy", best, [best], None)
+            fuzzy_matches = []
+            
+        if fuzzy_matches:
+            best_name, fr_best, _ = fuzzy_matches[0]
+            if fr_best >= 75: # Only proceed if the best match is decent
+                
+                # --- AMBIGUITY CHECK ---
+                if len(fuzzy_matches) > 1:
+                    second_name, fr_second, _ = fuzzy_matches[1]
+                    # If fuzzy scores are very close
+                    if (fr_best - fr_second) < _FUZZY_MARGIN:
+                        close_options = [best_name, second_name]
+                        hint = f"Your query '{query}' is ambiguous (fuzzy match). Did you mean: {', '.join(f'**{n}**' for n in close_options)}?"
+                        ambig_candidates = []
+                        for name in close_options:
+                            ds = self.df.loc[self.df["canonical_name"] == name, "dataset_name"].values[0]
+                            score = next(s for n, s, _ in fuzzy_matches if n == name)
+                            ambig_candidates.append(Candidate(ds, name, score, ["fuzzy_ambiguous"]))
+                        return ResolveResult("ambiguous", "fuzzy", None, ambig_candidates, hint)
+                # --- END AMBIGUITY CHECK ---
+                
+                # If we're here, it's a clear fuzzy winner
+                row = self.df.loc[self.df["canonical_name"] == best_name].iloc[0]
+                best = Candidate(row["dataset_name"], row["canonical_name"], fr_best, ["fuzzy"])
+                hint = f"Did you mean **{best.canonical_name}**? (Matched with {fr_best:.0f}% similarity)"
+                return ResolveResult("confirm", "fuzzy", best, [best], hint)
 
         # --- 6️⃣ Global semantic rescue ---
-        sem = semantic_rerank(query, self.df["canonical_name"].tolist())
-        if sem:
-            best_name, best_sim = sem[0]
-            alt_names = [n for n, _ in sem[1:4]]
-            if best_sim > _SEM_MID:
-                ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
-                best = Candidate(ds_name, best_name, best_sim * 100, ["semantic_global"])
-                if (best_sim >= _SEM_HIGH) and (best_sim - sem[1][1] > _SEM_MARGIN):
-                    return ResolveResult("ok", "semantic", best, [best], None)
-                hint = f"Did you mean **{best_name}**? If not, maybe: {', '.join(alt_names)}."
-                return ResolveResult("confirm", "semantic", best, [best], hint)
+        # MODIFIED: Use the ambiguity-aware logic here too
+        sem = semantic_rerank(query, self._canon_names)
+        if sem and sem[0][1] > _SEM_MID: # Check if best score is decent
+            return self._process_semantic_results(query, sem, [], method="semantic_global")
 
         return ResolveResult("not_found", "fuzzy", None, [], "No player matched. Please provide full name or team.")
 
-    # ----------------------------------------------------------
-    def _rank(self, query: str, frame: pd.DataFrame) -> List[Candidate]:
-        scored = []
-        for _, row in frame.iterrows():
-            sc, rs = self._score(query, row)
-            scored.append(Candidate(row["dataset_name"], row["canonical_name"], sc, rs))
-        scored.sort(key=lambda c: c.score, reverse=True)
-        return scored
-
-# ---------------------------------------------------------------------
-# Module-level instance
+# ---------------- Module-level instance + wrapper ----------------
+# This part remains the same
 _resolver = SmartNameResolver()
 
 def resolve_player_smart(query: str):
-    """Compact wrapper for CLI/agent use."""
+    """Return (dataset_name, canonical_name, status, hint)"""
     res = _resolver.resolve(query)
-    if res.status == "ok":
-        return (res.best.dataset_name, "ok")
-    if res.status == "confirm":
-        return (res.best.canonical_name, "confirm", res.ask_hint)
+
+    if res.status == "ok" and res.best:
+        return (res.best.dataset_name, res.best.canonical_name, "ok", None)
+
+    if res.status == "confirm" and res.best:
+        return (res.best.dataset_name, res.best.canonical_name, "confirm", res.ask_hint)
+
     if res.status == "ambiguous":
-        return ([c.canonical_name for c in res.candidates], "ambiguous", res.ask_hint)
-    return (None, "not_found", res.ask_hint)
+        # Return the *list* of options in the canonical_name slot
+        options = [c.canonical_name for c in res.candidates] if res.candidates else []
+        if res.best: # Should be None, but just in case
+            options = [res.best.canonical_name] + [o for o in options if o != res.best.canonical_name]
+        return (None, options, "ambiguous", res.ask_hint)
+
+    return (None, None, "not_found", res.ask_hint)
