@@ -200,9 +200,9 @@ This is the **main CLI and planner** responsible for interpreting and dispatchin
   - **Bowling stats**
   - **Performance prediction**
 - Automatically maps to the correct handler via:
-  ```python
+  ```
   from cricket_tools.core import cricket_query
-````
+  ```
 
 ensuring unified access to analytics and ML predictions.
 
