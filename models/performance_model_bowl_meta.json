@@ -1,0 +1,19 @@
+{
+  "created_at": "2025-11-06T17:45:04.321050Z",
+  "model_path": "models/performance_model_bowl.pkl",
+  "feature_cols": [
+    "balls",
+    "wickets",
+    "runs_conceded",
+    "economy",
+    "overs"
+  ],
+  "target_col": "wickets_per_match",
+  "metrics": {
+    "mse": 0.07767588520164417,
+    "rmse": 0.27870393826001844,
+    "n_train": 413,
+    "n_test": 138
+  },
+  "sklearn_model": "RandomForestRegressor"
+}

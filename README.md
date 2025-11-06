@@ -47,35 +47,223 @@ from cricket_tools.stats import get_player_stats, get_bowler_stats
 
 ## Step 4 — ML Prediction Integration (`ml_build.py`, `ml_model.py`, `core.py`)
 
-This step introduces the **machine-learning layer** that predicts a player’s expected *runs per match* from historical IPL data.  
-It plugs into the unified API so you can query via `core.cricket_query(..., role="predict")`.
+## Step 4 — ML Prediction Integration (`ml_build.py`, `ml_build_bowl.py`, `ml_model.py`, `core.py`)
+
+This step introduces the **machine-learning layer** that predicts a player’s expected performance —  
+both **batting (runs per match)** and **bowling (wickets per match)** — from historical IPL data.
+
+It plugs into the unified API so you can query via:
+```python
+core.cricket_query(..., role="predict")
+````
+
+and is fully integrated with the natural-language agent (Step 5).
 
 ---
 
-### Pipeline Overview
+### 🔁 Pipeline Overview
 
-1. **`ml_build.py`** – aggregates delivery-level records into player-level features.  
-2. **`ml_model.py`** – trains a `RandomForestRegressor` to predict *average runs per match*.  
-3. **`core.py`** – routes queries with `role="predict"` to `predict_future_performance()`.
+1. **`ml_build.py`** – aggregates delivery-level records into **batting** features.
+2. **`ml_build_bowl.py`** – aggregates delivery-level records into **bowling** features.
+3. **`ml_model.py`** – trains two `RandomForestRegressor` models:
+
+   * `performance_model_bat.pkl` for runs per match
+   * `performance_model_bowl.pkl` for wickets per match
+4. **`core.py`** – routes all `role="predict"` queries to `predict_future_performance()`,
+   which automatically selects or combines both models as needed.
 
 ---
 
-### Feature Construction
+### ⚙️ Feature Construction
 
-Source: `data/processed/ipl_deliveries.parquet` → Output: `data/processed/ml_features.parquet`
+**Batting features** → `data/processed/ml_features.parquet`
+**Bowling features** → `data/processed/ml_features_bowl.parquet`
 
-| Feature        | Meaning                         |
-|----------------|----------------------------------|
-| `matches`      | number of unique matches         |
-| `runs`         | total runs scored                |
-| `balls`        | total balls faced                |
-| `dismissals`   | times out                        |
-| `fours`, `sixes` | boundary counts               |
-| `strike_rate`  | `100 * runs / balls`             |
-| `avg`          | `runs / dismissals` (NaN→0 safe) |
+| Feature (Batting) | Description                        |
+| ----------------- | ---------------------------------- |
+| `matches`         | number of unique matches played    |
+| `runs`            | total runs scored                  |
+| `balls`           | total balls faced                  |
+| `dismissals`      | number of times out                |
+| `fours`, `sixes`  | boundary counts                    |
+| `strike_rate`     | `100 * runs / balls`               |
+| `avg`             | `runs / dismissals` (safe-divided) |
 
-Build features:
+| Feature (Bowling)   | Description                     |
+| ------------------- | ------------------------------- |
+| `matches`           | number of unique matches played |
+| `balls`             | total balls bowled              |
+| `runs_conceded`     | total runs conceded             |
+| `wickets`           | total wickets taken             |
+| `overs`             | `balls / 6`                     |
+| `economy`           | `runs_conceded / overs`         |
+| `wickets_per_match` | `wickets / matches`             |
+
+---
+
+### 🧠 Model Training
+
+Run both builders and model trainers:
 
 ```bash
-python -m cricket_tools.ml_build
+python cricket_tools/ml_build.py
+python cricket_tools/ml_build_bowl.py
+python cricket_tools/ml_model.py
+```
+
+Outputs:
+
+```
+✅ Batting model saved: models/performance_model_bat.pkl
+✅ Bowling model saved: models/performance_model_bowl.pkl
+```
+
+Each model saves metadata (`*_meta.json`) with feature list, training metrics, and timestamps.
+
+---
+
+### 🤖 Unified Predictor
+
+The function `predict_future_performance()` in `ml_model.py`:
+
+* Loads both batting and bowling datasets.
+* Runs both models if the player exists in both (e.g. *Bumrah*, *Hardik Pandya*).
+* Runs only the available one if player exists in a single dataset.
+* Never throws errors for missing roles — gracefully skips absent data.
+
+**Example Output (all-rounder like Bumrah):**
+
+```json
+{
+  "player": "Jasprit Bumrah",
+  "dataset_name": "JJ Bumrah",
+  "batting_prediction": {
+    "predicted_runs_per_match": 3.58,
+    "inputs": { ... }
+  },
+  "bowling_prediction": {
+    "predicted_wickets_per_match": 2.93,
+    "inputs": { ... }
+  }
+}
+```
+
+**Example Output (pure batsman):**
+
+```json
+{
+  "player": "Rohit Sharma",
+  "dataset_name": "R Sharma",
+  "batting_prediction": { ... }
+}
+```
+
+---
+
+### 🧩 Integration Notes
+
+* No changes are required in `core.py` or the agent interface.
+* Compatible with all backends (`mock`, `semantic`, `openai`).
+* Supports both single-role and dual-role players.
+* Returns structured JSON suitable for downstream analytics or visualization.
+
+---
+
+### ✅ Summary of Improvements
+
+| Enhancement             | Description                            |
+| ----------------------- | -------------------------------------- |
+| **Dual-model pipeline** | Separate batting & bowling regressors  |
+| **Automatic selection** | Detects available datasets dynamically |
+| **All-rounder support** | Runs                                   |
+
+Perfect — since your `CricketAgent`’s `_resolve_backend()` defaults to **OpenAI** when `--backend` is not specified (provided the API key is set), here’s the **corrected Step 5** in the same Markdown format:
+
+## Step 5 — Unified Agent Interface (`agent.py`)
+
+This step introduces a **modular natural-language agent** that understands user queries and routes them to the correct handler.
+
+It supports multiple backends (`mock`, `semantic`, `openai`) and translates free-form questions like:
+
+> “Forecast Bumrah’s form” → calls `cricket_query(..., role="predict")`
+
+---
+
+### File: `cricket_tools/agent.py`
+
+This is the **main CLI and planner** responsible for interpreting and dispatching user queries.
+
+- Parses natural-language inputs like `"Show Rohit Sharma batting average in 2023"`
+- Uses the **Smart Name Resolver** (Step 2) for fuzzy player identification
+- Detects query intent and determines whether it relates to:
+  - **Batting stats**
+  - **Bowling stats**
+  - **Performance prediction**
+- Automatically maps to the correct handler via:
+  ```python
+  from cricket_tools.core import cricket_query
+````
+
+ensuring unified access to analytics and ML predictions.
+
+---
+
+### Available Backends
+
+| Backend    | Description                                                                         |
+| ---------- | ----------------------------------------------------------------------------------- |
+| `openai`   | Cloud-based LLM planner (GPT-4o-mini by default). Used **by default** if available. |
+| `semantic` | Local vector-search planner using SentenceTransformer embeddings                    |
+| `mock`     | Offline, template-based planner for testing and debugging                           |
+
+> **Default behavior:** If no backend is specified and a valid `OPENAI_API_KEY` is present,
+> the agent automatically uses the **OpenAI backend**.
+> If not, it falls back to **Semantic**, and then to **Mock**.
+
+---
+
+### Running the Agent
+
+```bash
+# Default (auto → OpenAI)
+python -m cricket_tools.agent "Forecast Bumrah's form"
+
+# Force specific backend
+python -m cricket_tools.agent "Show Kohli stats" --backend mock
+python -m cricket_tools.agent "What is Rohit's strike rate in 2020?" --backend semantic
+python -m cricket_tools.agent "Forecast Bumrah's form" --backend openai
+```
+
+---
+
+### Bowling Forecast Support ✅
+
+The unified agent now supports **both batting and bowling prediction workflows** seamlessly.
+
+* If a player exists in **both models** → returns combined results (batting + bowling).
+* If a player exists in **only one model** → automatically falls back to that role’s prediction.
+* Bowling forecasts use the dedicated model (`perf_bowl_rf.pkl`) for wickets and economy rate.
+
+Example:
+
+```bash
+python -m cricket_tools.agent "Forecast Bumrah's form"
+```
+
+Output:
+
+```
+🎯 Jasprit Bumrah — Bowling Forecast
+Predicted wickets per match: 1.8
+Predicted economy rate: 6.9
+```
+
+---
+
+✅ Unified interface for all analytics and predictions
+✅ Default backend → **OpenAI (GPT-4o-mini)**
+✅ Automatic fallback to semantic → mock when needed
+✅ Automatic role detection and dual-role handling
+✅ CLI-friendly and production-ready architecture
+
 ```

@@ -49,13 +49,19 @@ def cricket_query(
     if status == "ok":
         handler = _ROLE_REGISTRY.get(role)
         if handler:
-            data = handler(
-                canon_name,
-                dataset_name=ds_name,
-                start=start,
-                end=end,
-                **kwargs,
-            )
+            import inspect
+
+            # Dynamically check which arguments the handler supports
+            sig = inspect.signature(handler)
+            params = sig.parameters
+
+            # Build call arguments dynamically
+            call_kwargs = {"start": start, "end": end, **kwargs}
+            if "dataset_name" in params:
+                call_kwargs["dataset_name"] = ds_name
+
+            # Call handler safely with the correct arguments
+            data = handler(canon_name, **call_kwargs)
         else:
             data = {"error": f"Unknown role '{role}'."}
 
