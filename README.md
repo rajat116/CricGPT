@@ -260,10 +260,10 @@ Predicted economy rate: 6.9
 
 ---
 
-✅ Unified interface for all analytics and predictions
-✅ Default backend → **OpenAI (GPT-4o-mini)**
-✅ Automatic fallback to semantic → mock when needed
-✅ Automatic role detection and dual-role handling
-✅ CLI-friendly and production-ready architecture
+- ✅ Unified interface for all analytics and predictions
+- ✅ Default backend → **OpenAI (GPT-4o-mini)**
+- ✅ Automatic fallback to semantic → mock when needed
+- ✅ Automatic role detection and dual-role handling
+- ✅ CLI-friendly and production-ready architecture
 
 ```
