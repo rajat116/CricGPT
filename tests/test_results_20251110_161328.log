@@ -1,0 +1,988 @@
+----------------------------------------------------------
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+[2025-11-10 16:13:41] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:13:44] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_batter_stats",
+      "args": {
+        "player": "Rohit Sharma",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Rohit Sharma",
+        "dataset_name": "RG Sharma",
+        "period": "2023-01-01–2023-12-31",
+        "role": "batter",
+        "data": {
+          "player": "Rohit Sharma",
+          "dataset_name": "RG Sharma",
+          "innings": 16,
+          "runs": 332,
+          "balls": 258,
+          "avg": 20.75,
+          "strike_rate": 128.68,
+          "dismissals": 16,
+          "period": "2023-01-01–2023-12-31",
+          "team_filter": "any"
+        }
+      },
+      "thought": "[openai] get_batter_stats for Rohit Sharma"
+    }
+  ]
+}
+
+
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+[2025-11-10 16:13:59] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:14:02] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_bowler_stats",
+      "args": {
+        "player": "Jasprit Bumrah",
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Jasprit Bumrah",
+        "dataset_name": "JJ Bumrah",
+        "period": "2024-01-01–2024-12-31",
+        "role": "bowler",
+        "data": {
+          "player": "Jasprit Bumrah",
+          "dataset_name": "JJ Bumrah",
+          "overs": 54.7,
+          "runs_conceded": 341,
+          "wickets": 21,
+          "economy": 6.24,
+          "period": "2024-01-01–2024-12-31",
+          "team_filter": "any",
+          "rows": 328
+        }
+      },
+      "thought": "[openai] get_bowler_stats for Jasprit Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+[2025-11-10 16:14:16] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:14:18] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "KL Rahul"
+      },
+      "result": {
+        "status": "ok",
+        "player": "KL Rahul",
+        "dataset_name": "KL Rahul",
+        "period": "start–end",
+        "role": "predict",
+        "data": {
+          "player": "KL Rahul",
+          "dataset_name": "KL Rahul",
+          "batting_prediction": {
+            "predicted_runs_per_match": 37.1,
+            "inputs": {
+              "balls": 3947.0,
+              "dismissals": 115.0,
+              "fours": 453.0,
+              "sixes": 208.0,
+              "strike_rate": 132.63237902204204,
+              "avg": 45.52173913043478
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-06T17:45:03.832398Z"
+          }
+        }
+      },
+      "thought": "[openai] predict_performance for KL Rahul"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+[2025-11-10 16:14:32] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:14:34] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 61.86it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 50.89it/s]
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Chepuk'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Rohit",
+        "playerB": "Virat",
+        "venue": "Chepuk",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2023-01-01–2023-12-31",
+        "data": {
+          "comparison": {
+            "Rohit Sharma": {
+              "note": "no data in selected filters"
+            },
+            "Virat": {
+              "error": "player_not_found",
+              "hint": "Your query 'Virat' is ambiguous. Did you mean: **Virat Singh**, **Virat Kohli**?"
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": null,
+            "venue": "M. A. Chidambaram Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] compare_players for Rohit"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+[2025-11-10 16:14:48] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:14:51] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 122.36it/s]
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+🧭 Resolved entities: {'city': 'Ahmedabad'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Dhoni",
+        "playerB": "Gill",
+        "city": "Ahmedabad"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "comparison": {
+            "MS Dhoni": {
+              "runs": 92,
+              "avg": 46.0,
+              "sr": 117.95,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 5
+            },
+            "Shubman Gill": {
+              "runs": 1157,
+              "avg": 55.1,
+              "sr": 157.84,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 25
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": null,
+            "venue": null,
+            "city": "Ahmedabad"
+          }
+        }
+      },
+      "thought": "[openai] compare_players for Dhoni"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+[2025-11-10 16:15:04] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:15:07] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Bumrah",
+        "playerB": "Shami",
+        "start": "2025-01-01",
+        "end": "2025-11-10"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2025-01-01–2025-11-10",
+        "data": {
+          "comparison": {
+            "Jasprit Bumrah": {
+              "runs": 68,
+              "avg": 11.33,
+              "sr": 83.95,
+              "wickets": 203,
+              "eco": 7.19,
+              "matches": 145
+            },
+            "Mohammed Shami": {
+              "runs": 84,
+              "avg": 6.0,
+              "sr": 90.32,
+              "wickets": 150,
+              "eco": 8.49,
+              "matches": 119
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": null,
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] compare_players for Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+[2025-11-10 16:15:21] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:15:23] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'MI', 'venue': 'Wankhede'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "MI",
+        "venue": "Wankhede"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "team": "Mumbai Indians",
+          "matches": 92,
+          "total_runs": 15367,
+          "wickets_taken": 597,
+          "wins": 56,
+          "win_ratio": 60.87,
+          "filters": {
+            "start": null,
+            "end": null,
+            "venue": "Wankhede Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] get_team_stats for MI"
+    }
+  ]
+}
+
+
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+[2025-11-10 16:15:37] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:15:39] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 86.27it/s]
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Chennai Super Kings'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "Chennai Super Kings",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2020-01-01–2020-12-31",
+        "data": {
+          "team": "Chennai Super Kings",
+          "matches": 252,
+          "total_runs": 41070,
+          "wickets_taken": 1564,
+          "wins": 142,
+          "win_ratio": 56.35,
+          "filters": {
+            "start": null,
+            "end": null,
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] get_team_stats for Chennai Super Kings"
+    }
+  ]
+}
+
+
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+[2025-11-10 16:15:53] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:15:57] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'RCB', 'city': 'Bangalore'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "RCB",
+        "city": "Bangalore",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2019-01-01–2019-12-31",
+        "data": {
+          "team": "Royal Challengers Bengaluru",
+          "matches": 12,
+          "total_runs": 2177,
+          "wickets_taken": 69,
+          "wins": 6,
+          "win_ratio": 50.0,
+          "filters": {
+            "start": null,
+            "end": null,
+            "venue": null,
+            "city": "Bengaluru"
+          }
+        }
+      },
+      "thought": "[openai] get_team_stats for RCB"
+    }
+  ]
+}
+
+
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+[2025-11-10 16:16:11] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:16:14] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 119.28it/s]
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+🧭 Resolved entities: {'city': 'Chennai'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "metric": "runs",
+        "season": "2021",
+        "n": 5,
+        "city": "Chennai"
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": "2021",
+          "venue": null,
+          "city": "Chennai",
+          "top_players": [
+            {
+              "player": "JM Bairstow",
+              "runs": 211
+            },
+            {
+              "player": "RG Sharma",
+              "runs": 201
+            },
+            {
+              "player": "GJ Maxwell",
+              "runs": 176
+            },
+            {
+              "player": "N Rana",
+              "runs": 155
+            },
+            {
+              "player": "SA Yadav",
+              "runs": 154
+            }
+          ]
+        }
+      },
+      "thought": "[openai] get_top_players for runs"
+    }
+  ]
+}
+
+
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+[2025-11-10 16:16:28] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:16:31] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.60it/s]
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Eden Gardens'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "metric": "wickets",
+        "venue": "Eden Gardens"
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "wickets",
+          "season": null,
+          "venue": "Eden Gardens",
+          "city": null,
+          "top_players": [
+            {
+              "player": "SP Narine",
+              "wickets": 77
+            },
+            {
+              "player": "AD Russell",
+              "wickets": 46
+            },
+            {
+              "player": "PP Chawla",
+              "wickets": 45
+            },
+            {
+              "player": "CV Varun",
+              "wickets": 30
+            },
+            {
+              "player": "Shakib Al Hasan",
+              "wickets": 26
+            }
+          ]
+        }
+      },
+      "thought": "[openai] get_top_players for wickets"
+    }
+  ]
+}
+
+
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+[2025-11-10 16:16:44] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:16:47] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "metric": "runs",
+        "season": "2023",
+        "n": 1
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": "2023",
+          "venue": null,
+          "city": null,
+          "top_players": [
+            {
+              "player": "Shubman Gill",
+              "runs": 890
+            }
+          ]
+        }
+      },
+      "thought": "[openai] get_top_players for Mumbai Indians"
+    }
+  ]
+}
+
+
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+[2025-11-10 16:17:02] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:17:04] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Chepuk stadium'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "venue": "Chepuk stadium"
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs_batter",
+          "note": "no data for given filters"
+        }
+      },
+      "thought": "[openai] get_top_players for None"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+[2025-11-10 16:17:18] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:17:22] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 36.52it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 26.09it/s]
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Chinnaswamy'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Kohli",
+        "playerB": "Rohit",
+        "venue": "Chinnaswamy"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "comparison": {
+            "Kohli": {
+              "error": "player_not_found",
+              "hint": "Your query 'Kohli' is ambiguous. Did you mean: **Virat Kohli**, **Taruwar Kohli**?"
+            },
+            "Rohit Sharma": {
+              "runs": 187,
+              "avg": 18.7,
+              "sr": 115.43,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 10
+            },
+            "info": "Data unavailable for one player; showing available stats for Rohit Sharma only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": null,
+            "venue": "M. Chinnaswamy Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] compare_players for Kohli"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+[2025-11-10 16:17:35] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:17:38] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "Shubman Gill"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Shubman Gill",
+        "dataset_name": "Shubman Gill",
+        "period": "start–end",
+        "role": "predict",
+        "data": {
+          "player": "Shubman Gill",
+          "dataset_name": "Shubman Gill",
+          "batting_prediction": {
+            "predicted_runs_per_match": 33.94,
+            "inputs": {
+              "balls": 2867.0,
+              "dismissals": 98.0,
+              "fours": 372.0,
+              "sixes": 119.0,
+              "strike_rate": 134.8447854900593,
+              "avg": 39.44897959183673
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-06T17:45:03.832398Z"
+          }
+        }
+      },
+      "thought": "[openai] predict_performance for Shubman Gill"
+    }
+  ]
+}
+
+
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+[2025-11-10 16:17:51] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:17:54] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'SRH'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "SRH",
+        "start": "2025-01-01",
+        "end": "2025-11-10"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2025-01-01–2025-11-10",
+        "data": {
+          "team": "Sunrisers Hyderabad",
+          "matches": 196,
+          "total_runs": 31590,
+          "wickets_taken": 1162,
+          "wins": 93,
+          "win_ratio": 47.45,
+          "filters": {
+            "start": null,
+            "end": null,
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[openai] get_team_stats for SRH"
+    }
+  ]
+}
+
+
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+[2025-11-10 16:18:08] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:18:11] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 121.00it/s]
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'KKR', 'city': 'Kolkata'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "KKR",
+        "city": "Kolkata"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "team": "Kolkata Knight Riders",
+          "matches": 95,
+          "total_runs": 15376,
+          "wickets_taken": 565,
+          "wins": 54,
+          "win_ratio": 56.84,
+          "filters": {
+            "start": null,
+            "end": null,
+            "venue": null,
+            "city": "Kolkata"
+          }
+        }
+      },
+      "thought": "[openai] get_team_stats for KKR"
+    }
+  ]
+}
+
+
+
+❓ Query: Who are best batsmen at M. A. Chidambaram Stadium
+----------------------------------------------------------------------
+[2025-11-10 16:18:25] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:18:28] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 88.58it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 129.01it/s]
+
+❓ Query: Who are best batsmen at M. A. Chidambaram Stadium
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'M. A. Chidambaram Stadium', 'city': 'Chennai'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "metric": "runs",
+        "n": 10,
+        "venue": "M. A. Chidambaram Stadium",
+        "city": "Chennai"
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": null,
+          "venue": "MA Chidambaram Stadium",
+          "city": "Chennai",
+          "top_players": [
+            {
+              "player": "MS Dhoni",
+              "runs": 1547
+            },
+            {
+              "player": "SK Raina",
+              "runs": 1506
+            },
+            {
+              "player": "M Vijay",
+              "runs": 928
+            },
+            {
+              "player": "MEK Hussey",
+              "runs": 848
+            },
+            {
+              "player": "RD Gaikwad",
+              "runs": 764
+            },
+            {
+              "player": "F du Plessis",
+              "runs": 588
+            },
+            {
+              "player": "RA Jadeja",
+              "runs": 518
+            },
+            {
+              "player": "S Dube",
+              "runs": 496
+            },
+            {
+              "player": "JA Morkel",
+              "runs": 487
+            },
+            {
+              "player": "S Badrinath",
+              "runs": 438
+            }
+          ]
+        }
+      },
+      "thought": "[openai] get_top_players for runs"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Dhoni and Pant at Delhi in 2020
+----------------------------------------------------------------------
+[2025-11-10 16:18:42] [INFO   ] 🔗 Using OpenAI backend (gpt-4o-mini).
+[2025-11-10 16:18:45] [INFO   ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 120.08it/s]
+
+❓ Query: Compare Dhoni and Pant at Delhi in 2020
+----------------------------------------------------------------------
+🧭 Resolved entities: {'city': 'Delhi'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Dhoni",
+        "playerB": "Pant",
+        "city": "Delhi",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2020-01-01–2020-12-31",
+        "data": {
+          "comparison": {
+            "MS Dhoni": {
+              "runs": 202,
+              "avg": 28.86,
+              "sr": 108.02,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 10
+            },
+            "Rishabh Pant": {
+              "runs": 984,
+              "avg": 37.85,
+              "sr": 154.96,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 29
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": null,
+            "venue": null,
+            "city": "Delhi"
+          }
+        }
+      },
+      "thought": "[openai] compare_players for Dhoni"
+    }
+  ]
+}
+
+
