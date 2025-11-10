@@ -267,75 +267,104 @@ Predicted economy rate: 6.9
 - ✅ CLI-friendly and production-ready architecture
 
 ---
+## 🧩 Step 6 — Context-Aware Knowledge & Multi-Player Reasoning
 
-## Step 6 — Agent Testing & Memory Verification (`run_agent_tests.sh`)
+This milestone extends the Cricket Chat Agent beyond single-player lookups, enabling **contextual**, **multi-player**, and **team-level** analytics.
 
-This stage validates the **complete CricGPT pipeline**, confirming that every module — from natural-language parsing to data retrieval and machine-learning prediction — works seamlessly together.
+---
 
-All tests are executed through the unified CLI:
+### 🎯 Goals
+- Understand queries such as:
+  - “Who scored the most runs for Mumbai in 2023?”
+  - “Compare Rohit and Virat this season.”
+- Add **team-level aggregations** and **multi-filter logic** (`season`, `venue`, `city`, `team`, etc.).
+- Handle **multiple player names** and **ambiguous queries** gracefully.
+- Introduce **caching** for faster repeated queries and prepare for conversational memory.
+
+---
+
+### 🏗️ Implementation Summary
+| Area | Implementation |
+|------|----------------|
+| **`filters.py`** | Introduced `apply_filters()` supporting filters for `start`, `end`, `season`, `team`, `player`, `venue`, and `city`. Added canonical normalization (e.g. *Banglore → Bengaluru*, *Chepuk → M. A. Chidambaram Stadium*). |
+| **`stats.py`** | • Added `get_team_stats()` for team-level summaries.<br>• Added `compare_players()` for two-player comparison.<br>• Enhanced `get_top_players()` to rank by `runs_batter` or `wickets`.<br>• All functions now use `df.copy()` to avoid Pandas warnings. |
+| **`core.py`** | Updated routing to detect multi-player or team-level intent and call the correct stats function. |
+| **`agent.py`** | Entity extractor now identifies multiple players, teams, venues, and seasons from free-text queries. |
+| **`smart_player_names.py`** | Continues to handle ambiguous names (e.g. *Virat → Virat Kohli / Virat Singh*). |
+| **`normalize_entity()`** | Unified canonicalization of city, team, and venue across all modules. |
+
+---
+
+### 🧠 Caching and Memory Notes
+- **Functional caching** (✅ implemented):  
+  - Dataset loading is memoized with `@lru_cache` in `filters.py`.  
+  - Repeated queries reuse cached dataframes for faster responses.
+- **Conversational memory** (🔄 upcoming in Step 7):  
+  - Will enable dialogue continuity, e.g. “Compare him to Kohli now” → knows “him” = previous player.
+
+---
+
+### ✅ Verified Capabilities
+| Feature | Example Query | Status |
+|----------|----------------|--------|
+| Player Batting Stats | “Show Rohit Sharma batting stats in 2023” | ✅ |
+| Bowler Stats | “Bowling stats for Jasprit Bumrah last year” | ✅ |
+| Performance Prediction | “Predict KL Rahul performance next match” | ✅ |
+| Player Comparison | “Compare Rohit and Virat in Chepuk 2023” | ✅ |
+| Team Performance | “How did Chennai Super Kings perform in 2020” | ✅ |
+| Top Players – Runs | “Top 5 run scorers in Chennai 2021” | ✅ |
+| Top Players – Wickets | “Top wicket takers at Eden Gardens” | ✅ |
+| Venue/City Normalization | “Banglore → Bengaluru”, “Chepuk → Chidambaram Stadium” | ✅ |
+| Ambiguity Handling | “Virat” → prompts user for clarification | ✅ |
+| Multi-Filter Logic | “RCB in Bengaluru 2019” | ✅ |
+
+---
+
+### 🧪 Testing the Full Setup
+You can verify every implemented feature automatically using the batch test suite:
 
 ```bash
-bash run_agent_tests.sh --backend openai
+# Run all queries with your preferred backend (auto | openai | semantic | mock)
+bash tests/run_agent_tests.sh openai
+````
+
+This script runs a comprehensive suite of queries covering:
+
+* Player, bowler, and predictive stats
+* Team-level and venue-specific analytics
+* Multi-player comparisons and top-player rankings
+* City/venue normalization and ambiguous name handling
+
+Each run saves a timestamped log under `tests/`, for example:
+
+```
+tests/test_results_20251110_163000.log
 ```
 
-### ✅ What Was Verified
-
-| Component              | Description                                                                                                                                            | Status |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| **Backend dispatch**   | Automatic backend selection (`openai` → `semantic` → `mock`)                                                                                           | ✅      |
-| **Entity resolution**  | Correct mapping of player, team, venue, and city names (handles typos / aliases)                                                                       | ✅      |
-| **Query routing**      | Each intent (`get_batter_stats`, `get_bowler_stats`, `compare_players`, `predict_performance`, `get_team_stats`, `get_top_players`) executed correctly | ✅      |
-| **Data integrity**     | Reads processed Parquet datasets and returns realistic aggregates (runs, wickets, averages, SR, economy)                                               | ✅      |
-| **ML inference**       | Loads trained `RandomForestRegressor` models for batting & bowling predictions                                                                         | ✅      |
-| **Ambiguity handling** | Returns helpful hints for ambiguous queries (“Did you mean Virat Kohli ?”)                                                                             | ✅      |
-| **Trace logging**      | Every run stored with timestamped JSON traces in `tests/test_results_*.log`                                                                            | ✅      |
-| **Memory system**      | Context-aware recall of previously resolved entities (players, venues, teams)                                                                          | ✅      |
-| **Error-free run**     | 0 exceptions or data-load failures across 20 sample queries                                                                                            | ✅      |
-
----
-
-### 🧠 Memory Layer Highlights
-
-Your agent now maintains a working **short-term + persistent memory** via `memory.py`:
-
-* **Short-term context:** remembers entities within a session (e.g., “his last match” → previous player).
-* **Persistent cache:** saves recent entities and their confidence scores in `.cache/memory_store.json`.
-* **Auto-recall:** subsequent queries reuse stored entities when input lacks explicit names.
-* **Reset option:** `python -m cricket_tools.agent --clear` clears memory.
-
-Example :
+To inspect results:
 
 ```bash
-> python -m cricket_tools.agent "Show Rohit Sharma stats in 2023"
-> python -m cricket_tools.agent "and what about his bowling?"
+less tests/test_results_<timestamp>.log
 ```
 
-→ Automatically recalls **Rohit Sharma** for the second query.
+---
+
+### 📊 Example Outputs
+
+```bash
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+→ Rohit Sharma – 364 runs @ 26.0 avg (SR 121.3)
+→ Virat Kohli – data unavailable (ambiguous name resolved)
+Info: Data available only for Rohit Sharma.
+
+❓ Query: Top wicket takers at Eden Gardens
+→ SP Narine – 77 wickets  
+→ AD Russell – 46  
+→ PP Chawla – 45  
+→ CV Varun – 30  
+→ Shakib Al Hasan – 26
+```
 
 ---
 
-### 🧾 Test Coverage
 
-Executed queries covered all major capabilities :
-
-1. Player batting & bowling stats
-2. Player vs player comparison
-3. Team performance by city / venue
-4. Venue-specific top-N leaderboards
-5. ML-based performance prediction
-6. Ambiguity + alias resolution tests
-7. Memory recall between consecutive queries
-
-All returned valid structured JSON responses.
-
----
-
-### 🏁 Step 6 Summary
-
-* ✅ **Agent pipeline fully validated** end-to-end
-* ✅ **Memory and context recall** confirmed functional
-* ✅ **Zero runtime errors** across all backends
-* ✅ **Comprehensive test log** saved for reproducibility
-
-> **Next:** Proceed to **Step 7 — Documentation & Packaging**,
-> where you’ll add demo examples, architecture diagrams, and usage instructions for publication.
