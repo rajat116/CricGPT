@@ -12,6 +12,9 @@ import json, sys, os, re, argparse, logging
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple, Callable, Literal
 from datetime import datetime, timezone  # ✅ added for time parsing
+from .memory import merge_with_memory, update_memory, clear_memory
+from .llm_fallback import llm_fallback_answer
+from .config import get_llm_client
 
 # ---------------------------------------------------------------------
 # Optional dependencies
@@ -334,11 +337,13 @@ class OpenAIPlanner(BasePlanner):
     def __init__(self, model="gpt-4o-mini"):
         if not HAVE_OPENAI:
             raise ImportError("OpenAI SDK not installed.")
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY not set in environment.")
-        self.client = OpenAI(api_key=api_key)
-        self.model = model
+
+        # ✅ Use unified LLM config (OpenAI, Gemini, or Ollama)
+        provider, model_name, client = get_llm_client()
+
+        self.provider = provider
+        self.model = model_name
+        self.client = client
 
     def decide_tool(self, question, trace):
         prompt = f"""
@@ -383,17 +388,36 @@ Return *only* a valid JSON object:
 Question: "{question}"
 """
 
-        resp = self.client.chat.completions.create(
-            model=self.model,
-            messages=[{"role": "system", "content": prompt}],
-            temperature=0,
-        )
-        text = resp.choices[0].message.content.strip()
+        # --- Branch depending on provider ---
+        if self.provider == "gemini":
+            # ✅ Gemini API requires creating a GenerativeModel instance
+            model_obj = self.client.GenerativeModel(self.model)
+            response = model_obj.generate_content(prompt)
+            text = response.text.strip()
+        else:
+            # Default: OpenAI-compatible
+            resp = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0,
+            )
+            text = resp.choices[0].message.content.strip()
+
+        # --- Parse JSON output (robust across LLMs) ---
+        clean_text = text.strip()
+
+        # ✅ Gemini and some LLMs wrap responses in markdown blocks
+        clean_text = re.sub(r"^```(?:json)?", "", clean_text, flags=re.IGNORECASE).strip()
+        clean_text = re.sub(r"```$", "", clean_text).strip()
+
+        # ✅ Sometimes Gemini adds multiple code fences or extra newlines
+        clean_text = clean_text.strip("` \n")
+
         try:
-            j = json.loads(text)
-        except Exception:
-            log.warning(f"OpenAI reply not valid JSON: {text}")
-            return {"action": "final_answer", "answer": text}
+            j = json.loads(clean_text)
+        except Exception as e:
+            log.warning(f"LLM reply not valid JSON, returning raw text. Error: {e}\n{text}")
+            return {"action": "final_answer", "answer": clean_text}
 
         # Extract fields
         act = j.get("action", "")
@@ -425,7 +449,6 @@ Question: "{question}"
             else:
                 act = "get_batter_stats"
 
-        # Construct args for cricket_query()
         args = {
             "player": player,
             "playerA": playerA,
@@ -443,36 +466,55 @@ Question: "{question}"
         return {
             "action": act,
             "args": {k: v for k, v in args.items() if v is not None},
-            "thought": f"[openai] {act} for {player or playerA or team or metric}",
+            "thought": f"[{self.provider}] {act} for {player or playerA or team or metric}",
         }
 
 # ---------------------------------------------------------------------
 # Agent + CLI (unchanged runtime)
 # ---------------------------------------------------------------------
-BackendChoice = Literal["auto", "mock", "semantic", "openai"]
+BackendChoice = Literal["auto", "mock", "semantic", "llm"]
 
 class CricketAgent:
     def __init__(self, backend="auto", model="gpt-4o-mini", semantic_model="all-MiniLM-L6-v2"):
         self.backend = self._resolve_backend(backend)
-        if self.backend == "openai":
-            self.planner = OpenAIPlanner(model=model); log.info(f"🔗 Using OpenAI backend ({model}).")
+        if self.backend == "llm":
+            self.planner = OpenAIPlanner(model=model)
+            log.info(f"🔗 Using LLM backend ({self.planner.provider}, {self.planner.model}).")
         elif self.backend == "semantic":
             self.planner = SemanticPlanner(model_name=semantic_model); log.info(f"🧠 Using Semantic backend ({semantic_model}).")
         else:
             self.planner = MockPlanner(); log.info("⚙️ Using Mock backend.")
 
     def _resolve_backend(self, backend):
-        if backend != "auto": return backend
-        if HAVE_OPENAI and os.getenv("OPENAI_API_KEY"): return "openai"
-        if HAVE_SEMANTIC: return "semantic"
+        if backend != "auto":
+            return backend
+        # Auto-select based on available environment
+        if os.getenv("LLM_PROVIDER"):
+            return "llm"
+        if HAVE_SEMANTIC:
+            return "semantic"
         return "mock"
 
     # ✅ Ensure this is indented under the class
     def run(self, question, max_iter=3):
         import inspect
         trace = []
+        # --- STEP-7 Memory merge before planning ---
+        # We don’t yet know entities, but after planner we can merge remembered context.
         plan = self.planner.decide_tool(question, trace)
         act = plan.get("action")
+
+        # --- STEP-7 Memory merge before planning ---
+        args_from_plan = plan.get("args", {}) or {}
+        merged_args = merge_with_memory(args_from_plan)
+
+        # 🧠 If memory contributed something, show it once
+        mem_used = {k: v for k, v in merged_args.items() if k not in args_from_plan and v}
+        if mem_used:
+            log.info(f"🧠 Using memory: {mem_used}")
+
+        plan["args"] = merged_args
+
 
         if act == "final_answer":
             return {"status": "final", "answer": plan.get("answer"), "trace": trace}
@@ -496,6 +538,35 @@ class CricketAgent:
             "result": result,
             "thought": plan.get("thought")
         })
+
+        # --- STEP-7 Update memory after successful tool run ---
+        update_memory(clean_args)
+
+        # --- 🧠 Fallback: if tool failed or returned no data ---
+        use_fallback = getattr(self, "fallback_enabled", False) or \
+                       os.getenv("ENABLE_LLM_FALLBACK", "false").lower() == "true"
+
+        if use_fallback and isinstance(result, dict):
+            # ✅ Smarter empty detection
+            empty_or_error = (
+                "error" in result
+                or result.get("status") == "error"
+                or (result.get("data") in (None, {}, []))
+                or (isinstance(result.get("data"), dict) and "note" in result["data"]
+                    and "no data" in str(result["data"]["note"]).lower())
+            )
+
+            if empty_or_error:
+                fb = llm_fallback_answer(question)
+                fb["answer"] = f"📊 No structured data found for this query — using AI reasoning:\n\n{fb['answer']}"
+                trace.append({
+                    "action": "llm_fallback",
+                    "args": {},
+                    "result": fb,
+                    "thought": "Triggered fallback due to empty/error tool result"
+                })
+                return fb
+
         return {"status": "final", "answer": "Tool executed", "trace": trace}
 
 def print_clean_result(q, res):
@@ -510,14 +581,20 @@ def print_clean_result(q, res):
 def main_cli():
     p = argparse.ArgumentParser()
     p.add_argument("question", nargs="*")
-    p.add_argument("--backend", default="auto", choices=["auto", "mock", "semantic", "openai"])
+    p.add_argument("--backend", default="auto", choices=["auto", "mock", "semantic", "llm"])
     p.add_argument("--model", default="gpt-4o-mini")
     p.add_argument("--semantic_model", default="all-MiniLM-L6-v2")
+    p.add_argument("--clear-memory", action="store_true", help="Clear previous session context")
+    p.add_argument("--fallback", action="store_true", help="Use LLM fallback for unknown or empty responses")
     args = p.parse_args()
     q = " ".join(args.question).strip()
     if not q:
         print("Please provide a question."); sys.exit(1)
     agent = CricketAgent(args.backend, args.model, args.semantic_model)
+    agent.fallback_enabled = args.fallback
+    if args.clear_memory:
+        clear_memory()
+        print("🧹 Cleared session memory.")
     r = agent.run(q); print_clean_result(q, r)
 
 if __name__ == "__main__":

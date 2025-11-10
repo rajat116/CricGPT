@@ -18,3 +18,4 @@ streamlit
 fastapi
 uvicorn
 faiss-cpu
+google-generativeai
