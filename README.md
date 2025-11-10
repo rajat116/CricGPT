@@ -266,11 +266,6 @@ Predicted economy rate: 6.9
 - ✅ Automatic role detection and dual-role handling
 - ✅ CLI-friendly and production-ready architecture
 
-
-
-
-Here’s your **Step 6** section in the same Markdown style as the rest of your README — concise, structured, and consistent:
-
 ---
 
 ## Step 6 — Agent Testing & Memory Verification (`run_agent_tests.sh`)
