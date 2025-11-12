@@ -249,6 +249,319 @@ while structured queries remain unaffected.
 
 ---
 
+## 🎨 Step 8 — Visualization & Interactive Dashboards
+
+This step adds a **unified plotting layer** that turns any tool result into clean, shareable charts saved under `outputs/plots/`. It uses a **dark theme**, timestamped filenames, and a robust **auto-router** so callers don’t need to choose chart types manually.
+
+---
+
+### What’s included
+
+* **Router:** `auto_plot_from_result(result, act)` → returns a PNG path under `outputs/plots/`.
+* **Direct renderer:** `generate_plot_from_result(result, act, plot_type)` (for explicit control).
+* **Graceful fallbacks:** If data is missing/insufficient, a readable **fallback card** is saved instead of raising errors.
+* **Consistent schema:** Upstream agent attaches `plot_path` to `{act, data, text}` for CLI/API/UI display.
+
+---
+
+### File layout
+
+```
+cricket_tools/
+  visuals.py           # all charts + router
+  analytics.py         # data providers used by visuals (H2H, momentum, phases, etc.)
+outputs/
+  plots/               # saved charts (PNG, timestamped)
+```
+
+---
+
+### Actions → Plots (auto-mapped)
+
+`auto_plot_from_result(result, act)` supports these actions:
+
+| Action (`act`)                | Plot type (auto)  | Description                                                 |
+| ----------------------------- | ----------------- | ----------------------------------------------------------- |
+| `get_batter_stats`            | `form`            | Compact bar card: Runs, Average, Strike Rate                |
+| `compare_players`             | `h2h`             | Side-by-side bars (Average, SR) for Player A vs B           |
+| `get_team_stats`              | `venue-ratio`     | Pie (Wins vs Losses) + overall win %                        |
+| `get_top_players`             | `top`             | Sorted Top-N bar chart (runs or wickets)                    |
+| `team_head_to_head`           | `h2h-team`        | Heat-matrix (Season × Venue) of Team-A win %                |
+| `team_momentum`               | `momentum`        | Over-by-over cumulative runs (“worm”) for both teams        |
+| `team_phase_dominance`        | `phase-dominance` | Powerplay/Middle/Death RPO bars per team                    |
+| `team_threat_map`             | `threat-map`      | Stacked horizontal bars: wickets by phase per bowler        |
+| `partnership_graph`           | `partnership`     | Top partnerships; **uses `innings_no` panels when present** |
+| `pressure_series`             | `pressure`        | Current vs Required run-rate lines                          |
+| `win_probability_series`      | `win-prob`        | Ball-by-ball win-probability line                           |
+| `llm_fallback*` (any variant) | `fallback`        | Readable fallback card (or tiny numeric bar)                |
+
+If `act` is unknown or the data is empty → a **fallback card** is saved automatically.
+
+---
+
+### Output & theming
+
+* **Save path:** `outputs/plots/<kind>_<context>_<YYYYMMDD_HHMMSS>.png`
+* **Theme:** `matplotlib` dark background, readable grids/labels, value annotations on bars.
+* **Sizing:** Auto-sized figures; multi-panel partnerships when `innings_no` is available.
+
+---
+
+### Typical usage (from agent / API)
+
+1. Run tool → get `{ act, data, text }`.
+2. Call: `plot_path = auto_plot_from_result(result, act)`.
+3. Return/emit: `{ act, data, text, plot_path }` to CLI/API/UI.
+4. UI (or CLI) renders both the **text** and the **image**.
+
+> You rarely need to choose a plot type manually. The router handles it.
+
+---
+
+### Implemented charts (highlights)
+
+* **Player Form Card**: Bars for `Runs`, `Average`, `Strike Rate`.
+* **H2H (Players)**: Two-bar groups for `Average` and `SR`; legend = player names.
+* **Team Win Ratio**: Pie of wins/losses + title shows win %.
+* **Top Players**: Sorted bars; supports `runs_batter` or `wickets`, optional `season`/`venue`/`city` qualifiers in title.
+* **H2H Matrix**: Season × Venue matrix of Team-A win %.
+* **Momentum Worm**: Over-by-over cumulative runs; optional season tag.
+* **Phase Dominance**: Powerplay/Middle/Death RPO comparison.
+* **Threat Map**: Stacked wickets by phase per bowler (horizontal bars).
+* **Partnerships**: Panels per `innings_no` when present; otherwise Top-N list.
+* **Pressure Series**: Current vs Required RPO across overs.
+* **Win Probability**: `over*6 + ball_in_over` indexing; % line plot.
+* **Fallback Card**: Always produces a readable image explaining missing/ambiguous data.
+
+---
+
+### Smoke-test checklist
+
+* [ ] `compare_players` → bar chart saved to `outputs/plots/…h2h…png`
+* [ ] `get_top_players` (`runs` & `wickets`) → sorted bars with correct qualifiers
+* [ ] `get_team_stats` → pie with correct win % and counts
+* [ ] `partnership_graph` → **separate panels per `innings_no`**
+* [ ] `pressure_series` / `win_probability_series` → lines render with labeled axes
+* [ ] Unknown/empty inputs → **fallback card** (no exceptions)
+* [ ] Fresh repo + `pip install -r requirements.txt` → plots save without errors
+
+---
+
+### Troubleshooting
+
+* **No file saved / blank plot?** Check that the upstream tool returned a proper `{ act, data }` payload.
+* **Wrong chart?** Ensure `act` matches one of the mapped actions above.
+* **Unreadable labels on Top-N?** Reduce `n` or widen the window; labels are rotated to avoid overlaps.
+* **Ambiguous player/team?** The resolver prompts upstream. Visuals draw only once data is concrete.
+
+---
+
+### Notes for the upcoming web UI
+
+* The returned `plot_path` is **ready to embed** in a chat-style interface.
+* Keep response schema stable: `{ act, data, text, plot_path }`.
+* (Optional later) Serve images via a static `/plots/<file>` route in FastAPI; current PNG files already suit Streamlit/CLI.
+
+
+Below is a **clean, professional, production-ready Step-8 README section** that fits **seamlessly after your Step-7**.
+Copy-paste directly into your repo README.
+
+---
+
+# 🎨 Step 8 — Visualization & Interactive Dashboards
+
+Step 8 adds a complete **visual analytics layer** on top of the structured IPL engine.
+Users can now generate **clean, informative charts** directly from natural-language queries using:
+
+```
+--plot
+--plot auto
+```
+
+All plots are saved to:
+
+```
+outputs/plots/<plot_name>_<timestamp>.png
+```
+
+The visualization layer is fully modular and works headlessly — ideal for both CLI usage and later **FastAPI/Streamlit UI integration**.
+
+---
+
+## 📌 8.1 — Visualization Architecture
+
+The visualization system lives entirely in:
+
+```
+cricket_tools/visuals.py
+```
+
+It contains:
+
+| Component                     | Role                                                   |
+| ----------------------------- | ------------------------------------------------------ |
+| `auto_plot_from_result()`     | Maps an agent action (`act`) to the correct chart type |
+| `generate_plot_from_result()` | Renders the actual plot from structured data           |
+| Individual plotters           | `plot_team_h2h_matrix`, `plot_partnership_graph`, etc. |
+| `_plot_fallback_card()`       | Graceful fallback when data is missing                 |
+
+This means **no plot logic* is in the agent or stats layers.
+Everything goes through this clean, isolated API.
+
+---
+
+## 📊 8.2 — Available Visualizations
+
+All plots use a dark theme, labelled axes, and value annotations for readability.
+
+| Intent / Action          | Plot Generated            | Description                        |
+| ------------------------ | ------------------------- | ---------------------------------- |
+| `get_batter_stats`       | **Form Card**             | Runs, Avg, SR bar chart            |
+| `compare_players`        | **Head-to-Head Bars**     | Avg/SR comparison                  |
+| `get_team_stats`         | **Win Ratio Pie**         | Wins vs Losses + %                 |
+| `get_top_players`        | **Top-N Bar Chart**       | Top runs or wickets                |
+| `team_head_to_head`      | **H2H Matrix**            | Venue × Season win %               |
+| `team_momentum`          | **Momentum Worm**         | Over-by-over cumulative runs       |
+| `team_phase_dominance`   | **Phase Dominance Bars**  | PP/Middle/Death RPO                |
+| `team_threat_map`        | **Bowling Threat Map**    | Wickets by phase × bowler          |
+| `partnership_graph`      | **Partnership Bars**      | Top partnerships (per innings)     |
+| `pressure_series`        | **RR Pressure Curve**     | Current vs Required RR             |
+| `win_probability_series` | **Win Probability Curve** | % vs ball number                   |
+| fallback                 | **Fallback Card**         | Shown when structured data missing |
+
+All plots accept multiple filters (season, venue, city, date range, team).
+
+---
+
+## ▶️ 8.3 — How to Run (CLI Examples)
+
+### A) Player-level plots
+
+```bash
+python -m cricket_tools.agent "Show Rohit Sharma batting stats in 2023" --plot
+```
+
+### B) Player comparison
+
+```bash
+python -m cricket_tools.agent "Compare Rohit Sharma and Virat Kohli in 2023" --plot
+```
+
+### C) Team metrics
+
+```bash
+python -m cricket_tools.agent "How did Chennai Super Kings perform in 2020?" --plot
+```
+
+### D) Top-N plots
+
+```bash
+python -m cricket_tools.agent "Top 5 run scorers in Mumbai 2021" --plot
+```
+
+### E) Advanced analytics
+
+```bash
+python -m cricket_tools.agent "Show momentum worm MI vs CSK 2019" --plot
+python -m cricket_tools.agent "Show phase dominance MI vs CSK 2019" --plot
+python -m cricket_tools.agent "Bowling threat map for Mumbai Indians 2020" --plot
+python -m cricket_tools.agent "Partnership graph for match 335982" --plot
+python -m cricket_tools.agent "Pressure curve for match 335982" --plot
+python -m cricket_tools.agent "Win probability for match 335982" --plot
+```
+
+Each command prints structured text + saves a chart to:
+
+```
+outputs/plots/<name>_<timestamp>.png
+```
+
+---
+
+## 🧪 8.4 — Direct Module Testing (Advanced)
+
+You can bypass the agent and test the visuals layer directly:
+
+```bash
+python - <<'PY'
+from cricket_tools.visuals import auto_plot_from_result
+from cricket_tools.stats import get_player_stats
+
+res = {
+    "act": "get_batter_stats",
+    "data": get_player_stats("Rohit Sharma", start="2023-01-01", end="2023-12-31")
+}
+print(auto_plot_from_result(res, "get_batter_stats"))
+PY
+```
+
+---
+
+## 🧠 8.5 — Smarter Fallback & Hybrid Logic (Completed)
+
+Step 8 also finalizes the hybrid **Reasoning LLM → Structured Data → Plot** pipeline:
+
+1. Agent tries structured IPL tools first.
+2. If tools return *empty* results → reasoning LLM confirms whether answer exists.
+3. If still no result → fallback LLM answer + fallback card plot.
+
+This prevents hallucinations and guarantees safe output every time.
+
+---
+
+## 📦 8.6 — Output Format & Conventions
+
+* All plots use consistent dark theme.
+* Filenames are timestamped:
+
+  ```
+  <plot>_YYYYMMDD_HHMMSS.png
+  ```
+* Legal deliveries only (no wides/noballs) for balls/overs.
+* Bowler-credited dismissals only (`bowled`, `caught`, `lbw`, `stumped`, `hit wicket`).
+* City/venue/team normalization applied automatically:
+
+  * “Banglore” → “Bengaluru”
+  * “Chepuk” → “M. A. Chidambaram Stadium”
+  * “RCB” → “Royal Challengers Bengaluru”
+
+---
+
+## 🛠️ 8.7 — Troubleshooting
+
+| Issue                 | Cause                       | Fix                                  |
+| --------------------- | --------------------------- | ------------------------------------ |
+| No PNG output         | Empty structured data       | Relax filters or check season        |
+| Ambiguous player name | Resolver triggered          | Use full name (e.g. "Rohit Sharma")  |
+| Fallback card shown   | No structured rows          | Dataset truly lacks data for filters |
+| Slow first command    | SentenceTransformer loading | Cached after first use               |
+
+---
+
+## 🎯 Step-8 Summary
+
+Step-8 completes the entire **visual analytics layer** for CricGPT:
+
+✔ Full suite of IPL-specific charts
+✔ Automatic plot routing using `--plot`
+✔ Hybrid LLM fallback → safe outputs
+✔ All visuals ready for web/Streamlit UI (Step-10)
+
+CricGPT now supports **end-to-end IPL insights with visual explanations**, making it ready for deployment as a chatbot-style web application.
+
+---
+
+If you want, I can now generate
+
+### ✅ Step-9 (removed)
+
+or
+
+### 🚀 Step-10 — Deployment Planning (FastAPI + Streamlit)
+
+just say **"give me Step-10 README"**
+
+
 ## 🚀 Upcoming Roadmap
 
 ### **Step 8 — Visualization & Interactive Dashboards**
