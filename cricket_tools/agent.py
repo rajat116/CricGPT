@@ -15,6 +15,8 @@ from datetime import datetime, timezone  # ✅ added for time parsing
 from .memory import merge_with_memory, update_memory, clear_memory
 from .llm_fallback import llm_fallback_answer
 from .config import get_llm_client
+import pandas as pd 
+from cricket_tools import analytics
 
 # ---------------------------------------------------------------------
 # Optional dependencies
@@ -117,6 +119,97 @@ def safe_call(tool_fn, **kwargs):
     valid_args = {k: v for k, v in kwargs.items() if k in inspect.signature(tool_fn).parameters}
     return tool_fn(**valid_args)
 
+def tool_team_head_to_head(teamA, teamB, start=None, end=None, season=None):
+    return analytics.team_head_to_head(teamA, teamB, start, end, season)
+
+def tool_team_momentum(teamA, teamB, season=None):
+    return analytics.team_momentum(teamA, teamB, season)
+
+def tool_team_phase_dominance(teamA, teamB, season=None):
+    return analytics.team_phase_dominance(teamA, teamB, season)
+
+def tool_team_threat_map(team, season=None):
+    return analytics.team_threat_map(team, season)
+
+'''def tool_partnership_graph(teamA=None, teamB=None, season=None, match_id=None):
+    if not match_id and teamA and teamB:
+        match_id = analytics._find_match_id(teamA, teamB, season)
+    if not match_id:
+        return {"error": "No match found for given teams/season."}
+    res = analytics.partnership_graph(match_id)
+    res["match_id"] = match_id  # 🩹 propagate to visuals
+    return res'''
+
+def tool_partnership_graph(teamA=None, teamB=None, season=None, match_id=None):
+    print(f"[DEBUG] >>> called tool_partnership_graph(teamA={teamA}, teamB={teamB}, season={season}, match_id={match_id})")
+
+    if not match_id and teamA and teamB:
+        match_id = analytics._find_match_id(teamA, teamB, season)
+        print(f"[DEBUG] _find_match_id() returned: {match_id}")
+
+    if not match_id:
+        print("[DEBUG] No match_id found — returning early.")
+        return {"error": f"No match found for {teamA} vs {teamB} ({season})."}
+
+    try:
+        res = analytics.partnership_graph(match_id)
+        print(f"[DEBUG] analytics.partnership_graph() returned type={type(res)}, keys={list(res.keys()) if isinstance(res, dict) else 'N/A'}")
+    except Exception as e:
+        print(f"[DEBUG] Exception while calling partnership_graph: {e}")
+        res = {"error": str(e)}
+
+    try:
+        res["match_id"] = match_id
+    except Exception as e:
+        print(f"[DEBUG] Exception while setting match_id: {e}")
+        res = {"error": f"Failed to set match_id: {e}"}
+
+    print(f"[DEBUG] >>> final res keys: {list(res.keys()) if isinstance(res, dict) else 'N/A'}")
+    return res
+
+'''def tool_pressure_series(teamA=None, teamB=None, season=None, match_id=None):
+    if not match_id and teamA and teamB:
+        match_id = analytics._find_match_id(teamA, teamB, season)
+    if not match_id:
+        return {"error": "No match found for given teams/season."}
+    res = analytics.pressure_series(match_id)
+    if isinstance(res, pd.DataFrame):
+        res = res.to_dict(orient="list")
+    res["match_id"] = match_id
+    return res'''
+
+# In agent.py
+def tool_pressure_series(teamA=None, teamB=None, season=None, match_id=None):
+    if not match_id and teamA and teamB:
+        match_id = analytics._find_match_id(teamA, teamB, season)
+    if not match_id:
+        return {"error": "No match found for given teams/season."}
+    
+    print(f"[DEBUG agent.py] Calling analytics.pressure_series({match_id})") # <-- ADD
+    res = analytics.pressure_series(match_id)
+    print(f"[DEBUG agent.py] analytics.pressure_series returned: {type(res)}") # <-- ADD
+    
+    if isinstance(res, pd.DataFrame):
+        print(f"[DEBUG agent.py] DataFrame is empty: {res.empty}") # <-- ADD
+        if not res.empty:
+             print(res.head()) # <-- ADD
+        res = res.to_dict(orient="list")
+        
+    res["match_id"] = match_id
+    print(f"[DEBUG agent.py] Final tool result dict: {res}") # <-- ADD
+    return res
+
+def tool_win_probability_series(teamA=None, teamB=None, season=None, match_id=None):
+    if not match_id and teamA and teamB:
+        match_id = analytics._find_match_id(teamA, teamB, season)
+    if not match_id:
+        return {"error": "No match found for given teams/season."}
+    res = analytics.win_probability_series(match_id)
+    if isinstance(res, pd.DataFrame):
+        res = res.to_dict(orient="list")
+    res["match_id"] = match_id
+    return res
+
 # ---------------------------------------------------------------------
 # Combine registry
 # ---------------------------------------------------------------------
@@ -128,6 +221,14 @@ TOOL_REGISTRY = {
     "compare_players": tool_compare_players,
     "get_team_stats": tool_get_team_stats,
     "get_top_players": tool_get_top_players,
+    # Step-8.5 analytics tools
+    "team_head_to_head": tool_team_head_to_head,
+    "team_momentum": tool_team_momentum,
+    "team_phase_dominance": tool_team_phase_dominance,
+    "team_threat_map": tool_team_threat_map,
+    "partnership_graph": tool_partnership_graph,
+    "pressure_series": tool_pressure_series,
+    "win_probability_series": tool_win_probability_series,
 }
 
 # ---------------------------------------------------------------------
@@ -348,6 +449,13 @@ Available tools:
 - compare_players(playerA, playerB, start, end)
 - get_team_stats(team, start, end, venue, city)
 - get_top_players(metric, season, n, venue, city)
+- team_head_to_head(teamA, teamB, season)
+- team_momentum(teamA, teamB, season)
+- team_phase_dominance(teamA, teamB, season)
+- team_threat_map(team, season)
+- partnership_graph(teamA, teamB, season)
+- pressure_series(teamA, teamB, season)
+- win_probability_series(teamA, teamB, season)
 
 Guidelines:
 - "compare", "vs", or "versus" → compare_players
@@ -512,9 +620,17 @@ Then map it to the correct structured tool:
 Available structured tools:
 - get_batter_stats(player, start, end)
 - get_bowler_stats(player, start, end)
+- predict_performance(player, start, end)
 - compare_players(playerA, playerB, start, end)
 - get_team_stats(team, start, end, venue, city)
 - get_top_players(metric, season, n, venue, city)
+- team_head_to_head(teamA, teamB, season)
+- team_momentum(teamA, teamB, season)
+- team_phase_dominance(teamA, teamB, season)
+- team_threat_map(team, season)
+- partnership_graph(teamA, teamB, season)
+- pressure_series(teamA, teamB, season)
+- win_probability_series(teamA, teamB, season)
 
 Mapping hints:
 - Phrases with "top", "most", "highest runs", or "wickets" → get_top_players
@@ -522,6 +638,16 @@ Mapping hints:
 - "how did <TEAM> perform", "team stats" → get_team_stats
 - "bat", "average", "runs", "form" → get_batter_stats
 - "bowl", "wickets", "economy" → get_bowler_stats
+- "head-to-head", "vs", "versus" + two team names → team_head_to_head
+- "momentum worm", "worm chart", "over-by-over" → team_momentum
+- "phase comparison", "phase dominance", "powerplay vs death" → team_phase_dominance
+- "threat map", "bowling threat", "phase wickets", "bowler impact" → team_threat_map
+- "partnership graph", "batting partnership", "pair runs", "links between batsmen" → partnership_graph
+  (Requires two team names and optional season; automatically resolves match_id.)
+- "pressure curve", "required run rate", "current run rate", "rpo comparison" → pressure_series
+  (Works for any IPL match between two teams in a season.)
+- "win probability", "chance to win", "probability curve", "match win chances" → win_probability_series
+  (Uses the same inferred match context automatically.)
 - Always include the detected year as "season" or as ("start","end").
 
 ---
@@ -536,6 +662,8 @@ Return only a valid JSON object (no markdown, no code fences):
     "playerA": null,
     "playerB": null,
     "team": null,
+    "teamA": null,
+    "teamB": null,
     "start": null,
     "end": null,
     "venue": null,
@@ -761,26 +889,87 @@ class CricketAgent:
         #               os.getenv("ENABLE_LLM_FALLBACK", "false").lower() == "true"
         use_fallback = True
 
-        if use_fallback and isinstance(result, dict):
+        # ✅ DEFINE a list of tools that return raw data (dicts/DataFrames)
+        #    and do NOT follow the {"data": ...} schema.
+        RAW_DATA_TOOLS = [
+            "team_head_to_head",
+            "team_momentum",
+            "team_phase_dominance",
+            "team_threat_map",
+            "partnership_graph",
+            "pressure_series",
+            "win_probability_series"
+        ]
+
+        if use_fallback and (isinstance(result, dict) or isinstance(result, pd.DataFrame)):
+            
             # ✅ Smarter empty detection
-            empty_or_error = (
-                "error" in result
-                or result.get("status") == "error"
-                or (result.get("data") in (None, {}, []))
-                or (isinstance(result.get("data"), dict) and "note" in result["data"]
-                    and "no data" in str(result["data"]["note"]).lower())
-            )
+            empty_or_error = False # Start with False
+
+            if isinstance(result, dict) and "error" in result:
+                empty_or_error = True
+            elif isinstance(result, dict) and result.get("status") == "error":
+                empty_or_error = True
+            elif act not in RAW_DATA_TOOLS:
+                # --- This is a STATS tool, it MUST have a 'data' key ---
+                if isinstance(result, dict):
+                    empty_or_error = (
+                        (result.get("data") in (None, {}, []))
+                        or (isinstance(result.get("data"), dict) and "note" in result["data"]
+                            and "no data" in str(result["data"]["note"]).lower())
+                    )
+                else:
+                    # Not a dict, must be an error
+                    empty_or_error = True
+            
+            elif act in RAW_DATA_TOOLS:
+                # --- This is a RAW tool, check for its specific empty state ---
+                if isinstance(result, pd.DataFrame) and result.empty:
+                    empty_or_error = True
+                elif isinstance(result, dict):
+                    if act == "partnership_graph" and not result.get("nodes"):
+                        empty_or_error = True
+                    elif act == "team_momentum" and not result.get("data"):
+                        empty_or_error = True
+                    elif act == "team_phase_dominance" and not result.get("phases"):
+                        empty_or_error = True
+                    elif act == "pressure_series" and not result.get("over"):
+                        empty_or_error = True
+                    elif act == "win_probability_series" and not result.get("over"): # Check for 'over' or 'win_prob'
+                        empty_or_error = True
+                    elif act == "team_head_to_head" and not result.get("records"):
+                        empty_or_error = True
+                    elif act == "team_threat_map" and isinstance(result, pd.DataFrame) and result.empty:
+                        empty_or_error = True # This one returns a DF, covered above, but good to be explicit
+            
+            # (End of new logic)
 
             if empty_or_error:
                 fb = llm_fallback_answer(question)
                 fb["answer"] = f"📊 No structured data found for this query — using AI reasoning:\n\n{fb['answer']}"
+                
+                # Append the fallback step to the trace
                 trace.append({
                     "action": "llm_fallback",
                     "args": {},
                     "result": fb,
                     "thought": "Triggered fallback due to empty/error tool result"
                 })
-                return fb
+                
+                # --- ⬇️ FIX ⬇️ ---
+                # Return the FULL trace and complete response
+                final_response = {
+                    "status": "final", 
+                    "answer": fb["answer"], # Use the fallback answer
+                    "trace": trace,         # Return the full trace
+                    
+                    # Also merge the fallback 'data' and 'action' for consistency
+                    "action": fb.get("action", "llm_fallback_generic"),
+                    "args": fb.get("args", {}),
+                    "data": fb.get("data", {}),
+                    "reasoning": fb.get("reasoning", "Structured fallback")
+                }
+                return final_response
 
         return {"status": "final", "answer": "Tool executed", "trace": trace}
 
@@ -802,8 +991,8 @@ def main_cli():
     p.add_argument("--clear-memory", action="store_true", help="Clear previous session context")
     p.add_argument("--fallback", action="store_true", help="Use LLM fallback for unknown or empty responses")
     # --- 🆕 Step-8 Visualization flags ---
-    p.add_argument("--plot", choices=["auto", "form", "h2h", "venue-ratio"],
-                   help="Generate broadcast-style plot (auto | form | h2h | venue-ratio)")
+    p.add_argument("--plot", choices=["auto", "form", "h2h", "top", "venue-ratio", "h2h-team", "momentum", "phase-dominance", "threat-map", "partnership", "pressure", "win-prob"],
+                   help="Generate broadcast-style or analytics plot (auto | form | top | h2h | venue-ratio | h2h-team | momentum | phase-dominance | threat-map | partnership | pressure | win-prob)")
     p.add_argument("--players", nargs="+",
                    help="Player(s) for plotting (one for form; two for h2h)")
     p.add_argument("--team",

@@ -1,15 +1,14 @@
 {
-  "ts": 1762951767.6197782,
+  "ts": 1762978535.1888692,
   "context": {
+    "season": "2019",
+    "start": "2021-01-01",
+    "end": "2021-12-31",
     "player": "Rohit Sharma",
-    "start": "2020-01-01",
-    "end": "2020-12-31",
-    "season": "2021",
-    "metric": "runs",
     "playerA": "Virat Kohli",
     "playerB": "Rohit Sharma",
     "team": "Mumbai Indians",
-    "n": 5,
-    "venue": "Wankhede"
+    "metric": "runs",
+    "n": 5
   }
 }
