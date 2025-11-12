@@ -43,6 +43,7 @@ except ImportError:
 # Local imports
 # ---------------------------------------------------------------------
 from .core import cricket_query
+from . import visuals  # 🆕 Step-8 integrated visuals (LLM-driven)
 
 # ---------------------------------------------------------------------
 # 🔧 Helper: interpret natural or explicit time ranges
@@ -97,17 +98,6 @@ def tool_get_bowler_stats(player, start=None, end=None, **kwargs):
 def tool_predict_performance(player, start=None, end=None, **kwargs):
     return cricket_query(player, role="predict", start=start, end=end)
 
-def tool_compare_players(playerA, playerB, start=None, end=None, team=None, venue=None, city=None, season=None, **kwargs):
-    return cricket_query("", role="compare",
-                         playerA=playerA, playerB=playerB,
-                         start=start, end=end, team=team, venue=venue, city=city, season=season)
-
-def tool_get_team_stats(team, start=None, end=None, venue=None, city=None, **kwargs):
-    return cricket_query("", role="team", team=team, start=start, end=end, venue=venue, city=city)
-
-def tool_get_top_players(metric="runs_batter", season=None, n=5, venue=None, city=None, **kwargs):
-    return cricket_query("", role="top", metric=metric, season=season, n=n, venue=venue, city=city)
-
 # ---------------------------------------------------------------------
 # 🆕 Step-6: new tool wrappers for team / compare / top analytics
 # ---------------------------------------------------------------------
@@ -116,8 +106,8 @@ def tool_compare_players(playerA, playerB, start=None, end=None, team=None, venu
                          playerA=playerA, playerB=playerB,
                          start=start, end=end, team=team, venue=venue, city=city)
 
-def tool_get_team_stats(team, start=None, end=None, venue=None, city=None):
-    return cricket_query("", role="team", team=team, start=start, end=end, venue=venue, city=city)
+def tool_get_team_stats(team, start=None, end=None, season=None, venue=None, city=None, **kwargs):
+    return cricket_query("", role="team", team=team, start=start, end=end, season=season, venue=venue, city=city)
 
 def tool_get_top_players(metric="runs_batter", season=None, n=5, venue=None, city=None):
     return cricket_query("", role="top", metric=metric, season=season, n=n, venue=venue, city=city)
@@ -470,6 +460,176 @@ Question: "{question}"
         }
 
 # ---------------------------------------------------------------------
+# 🧠 Reasoning LLM Planner (Hybrid IPL Reasoning + Retry + Fallback)
+# ---------------------------------------------------------------------
+class ReasoningLLMPlanner(BasePlanner):
+    MAX_RETRIES = 3
+
+    def __init__(self, model="gpt-4o-mini"):
+        provider, model_name, client = get_llm_client()
+        self.provider = provider
+        self.model = model_name
+        self.client = client
+
+    # -----------------------------------------------------------------
+    def _try_reason_once(self, question: str, prompt_suffix: str = "") -> dict | None:
+        """Perform one reasoning attempt and return parsed JSON or None."""
+        prompt = f"""
+You are a cricket analytics reasoning engine specialized *only* for the Indian Premier League (IPL) dataset.
+
+Your goal: decide which analysis tool to use. You have **two options only**:
+1.  llm_fallback → for general cricket knowledge or any non-IPL tournament.
+2.  IPL structured tools → for IPL-specific data such as player or team performance.
+
+---
+
+### RULE 1 — Non-IPL Check (HIGHEST PRIORITY)
+First, scan the query for explicit **non-IPL tournament keywords**.
+
+Non-IPL keywords:
+World Cup, ODI, Test, Asia Cup, T20I, T20 World Cup, ICC, bilateral series, against England, against Australia, against Pakistan
+
+If you find **any** of these keywords, you must immediately choose:
+action = "llm_fallback"
+
+Do **not** use structured tools if these words appear, even if player names or years are mentioned.
+
+**Examples of RULE 1**
+- Query: "How did Rohit Sharma perform in 2016 ODI World Cup"
+  → Contains "ODI World Cup" → action = "llm_fallback"
+- Query: "Top wicket takers in ICC World Cup 2019"
+  → Contains "ICC World Cup" → action = "llm_fallback"
+- Query: "Best batsmen in bilateral series against England"
+  → Contains "bilateral series" → action = "llm_fallback"
+
+---
+
+### RULE 2 — IPL Tool Mapping (Only if Rule 1 does NOT apply)
+If and only if the query does **not** contain any non-IPL keyword from Rule 1, assume it refers to the IPL.
+
+Then map it to the correct structured tool:
+
+Available structured tools:
+- get_batter_stats(player, start, end)
+- get_bowler_stats(player, start, end)
+- compare_players(playerA, playerB, start, end)
+- get_team_stats(team, start, end, venue, city)
+- get_top_players(metric, season, n, venue, city)
+
+Mapping hints:
+- Phrases with "top", "most", "highest runs", or "wickets" → get_top_players
+- "compare", "vs", or "between" → compare_players
+- "how did <TEAM> perform", "team stats" → get_team_stats
+- "bat", "average", "runs", "form" → get_batter_stats
+- "bowl", "wickets", "economy" → get_bowler_stats
+- Always include the detected year as "season" or as ("start","end").
+
+---
+
+### OUTPUT FORMAT
+Return only a valid JSON object (no markdown, no code fences):
+
+{{
+  "action": "<tool_name_or_llm_fallback>",
+  "args": {{
+    "player": null,
+    "playerA": null,
+    "playerB": null,
+    "team": null,
+    "start": null,
+    "end": null,
+    "venue": null,
+    "city": null,
+    "season": null,
+    "metric": null,
+    "n": null,
+    "topic": null
+  }},
+  "reasoning": "<short explanation of why you chose this action>"
+}}
+
+Query: "{question}"
+{prompt_suffix}
+"""
+        try:
+            if self.provider == "gemini":
+                model_obj = self.client.GenerativeModel(self.model)
+                response = model_obj.generate_content(prompt)
+                text = response.text.strip()
+            else:
+                resp = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "system", "content": prompt}],
+                    temperature=0.2,
+                )
+                text = resp.choices[0].message.content.strip()
+        except Exception as e:
+            log.warning(f"Reasoning LLM call failed: {e}")
+            return None
+
+        raw = text.strip()
+        clean = re.sub(r"^```(?:json)?", "", raw).strip()
+        clean = re.sub(r"```$", "", clean).strip("` \n")
+
+        try:
+            return json.loads(clean)
+        except Exception as e:
+            log.warning(f"Invalid JSON in reasoning output: {e}\n{text}")
+            return None
+
+    # -----------------------------------------------------------------
+    def decide_tool(self, question, trace):
+        trace_local = []
+        result = None
+
+        for i in range(self.MAX_RETRIES):
+            suffix = ""
+            if i == 1:
+                suffix = "\nRetry 2: Rephrase internally if needed so it fits IPL seasons, venues, or players."
+            elif i == 2:
+                suffix = "\nRetry 3: Final attempt — assume the user meant IPL context unless the question explicitly says World Cup, Asia Cup, ODI, or T20I."
+
+            j = self._try_reason_once(question, suffix)
+            if j:
+                trace_local.append({
+                    "attempt": i + 1,
+                    "action": j.get("action"),
+                    "reasoning": j.get("reasoning")
+                })
+                if j.get("action"):
+                    result = j
+                    # ✅ stop immediately if the model already decided fallback
+                    if j["action"] == "llm_fallback" or j["action"].startswith("llm_fallback"):
+                        break
+                    # otherwise keep only when it's a structured IPL tool
+                    if j["action"] != "llm_fallback":
+                        break
+            else:
+                trace_local.append({"attempt": i + 1, "error": "no valid JSON"})
+
+        if not result:
+            result = {
+                "action": "llm_fallback",
+                "args": {"topic": question},
+                "reasoning": "All 3 reasoning attempts failed to produce valid plan."
+            }
+
+        args = result.get("args", {}) or {}
+
+        s2, e2 = interpret_time_range(question)
+        if s2 or e2:
+            args["start"], args["end"] = s2, e2
+
+        log.info(f"🧩 Reasoning result → {result.get('action')} | args={args}")
+
+        return {
+            "action": result.get("action", "get_batter_stats"),
+            "args": args,
+            "thought": f"[reasoning] {result.get('reasoning', 'No reasoning given')}",
+            "retries": trace_local
+        }
+
+# ---------------------------------------------------------------------
 # Agent + CLI (unchanged runtime)
 # ---------------------------------------------------------------------
 BackendChoice = Literal["auto", "mock", "semantic", "llm"]
@@ -480,6 +640,9 @@ class CricketAgent:
         if self.backend == "llm":
             self.planner = OpenAIPlanner(model=model)
             log.info(f"🔗 Using LLM backend ({self.planner.provider}, {self.planner.model}).")
+        elif self.backend == "llm_reasoning":
+            self.planner = ReasoningLLMPlanner(model=model)
+            log.info(f"🧠 Using Reasoning LLM backend ({self.planner.provider}, {self.planner.model}).")
         elif self.backend == "semantic":
             self.planner = SemanticPlanner(model_name=semantic_model); log.info(f"🧠 Using Semantic backend ({semantic_model}).")
         else:
@@ -506,7 +669,31 @@ class CricketAgent:
 
         # --- STEP-7 Memory merge before planning ---
         args_from_plan = plan.get("args", {}) or {}
-        merged_args = merge_with_memory(args_from_plan)
+
+        # Pull memory but DO NOT overwrite explicit plan args
+        mem_args = merge_with_memory(args_from_plan) or {}
+
+        # 1) Plan args must win over memory
+        merged_args = {**mem_args, **args_from_plan}
+
+        # 2) If the current plan didn't mention venue/city, strip them (avoid stale filters)
+        if "venue" not in args_from_plan:
+            merged_args.pop("venue", None)
+        if "city" not in args_from_plan:
+            merged_args.pop("city", None)
+
+        # 3) Never drop explicit season/start/end
+        for k in ("season", "start", "end", "team"):
+            if k in args_from_plan and args_from_plan[k] is not None:
+                merged_args[k] = args_from_plan[k]
+
+        # (optional) log what memory actually contributed
+        mem_used = {k: v for k, v in merged_args.items()
+                    if k not in args_from_plan and v is not None}
+        if mem_used:
+            log.info(f"🧠 Using memory (filtered): {mem_used}")
+
+        plan["args"] = merged_args
 
         # 🧠 If memory contributed something, show it once
         mem_used = {k: v for k, v in merged_args.items() if k not in args_from_plan and v}
@@ -515,15 +702,42 @@ class CricketAgent:
 
         plan["args"] = merged_args
 
+        # 🩹 Patch: if start/end belong to same year, auto-fill season
+        args = plan.get("args", {}) or {}
+        if args.get("start") and args.get("end"):
+            try:
+                y1 = str(args["start"])[:4]
+                y2 = str(args["end"])[:4]
+                if y1 == y2:
+                    args["season"] = y1
+                    print(f"[DEBUG] Auto-inferred season={y1} from start/end")
+            except Exception:
+                pass
+        plan["args"] = args  # update plan after patch
 
         if act == "final_answer":
             return {"status": "final", "answer": plan.get("answer"), "trace": trace}
+
+        # --- 🧩 Direct handling of reasoning-based LLM fallback ---
+        if act == "llm_fallback":
+            fb = llm_fallback_answer(question)
+            fb["reasoning"] = plan.get("thought", "Triggered LLM fallback reasoning.")
+            trace.append({
+                "action": "llm_fallback",
+                "args": plan.get("args", {}),
+                "result": fb,
+                "thought": fb.get("reasoning", "")
+            })
+            return fb
 
         tool = TOOL_REGISTRY.get(act)
         if not tool:
             return {"status": "error", "message": f"Unknown action {act}", "trace": trace}
 
         args = plan.get("args", {}) or {}
+        # 🩹 carry over season if auto-inferred earlier
+        if "season" not in args and plan.get("args", {}).get("season"):
+            args["season"] = plan["args"]["season"]
         valid_params = inspect.signature(tool).parameters
         clean_args = {k: v for k, v in args.items() if k in valid_params}
 
@@ -543,8 +757,9 @@ class CricketAgent:
         update_memory(clean_args)
 
         # --- 🧠 Fallback: if tool failed or returned no data ---
-        use_fallback = getattr(self, "fallback_enabled", False) or \
-                       os.getenv("ENABLE_LLM_FALLBACK", "false").lower() == "true"
+        #use_fallback = getattr(self, "fallback_enabled", False) or \
+        #               os.getenv("ENABLE_LLM_FALLBACK", "false").lower() == "true"
+        use_fallback = True
 
         if use_fallback and isinstance(result, dict):
             # ✅ Smarter empty detection
@@ -581,13 +796,51 @@ def print_clean_result(q, res):
 def main_cli():
     p = argparse.ArgumentParser()
     p.add_argument("question", nargs="*")
-    p.add_argument("--backend", default="auto", choices=["auto", "mock", "semantic", "llm"])
+    p.add_argument("--backend", default="llm_reasoning", choices=["auto", "mock", "semantic", "llm", "llm_reasoning"])
     p.add_argument("--model", default="gpt-4o-mini")
     p.add_argument("--semantic_model", default="all-MiniLM-L6-v2")
     p.add_argument("--clear-memory", action="store_true", help="Clear previous session context")
     p.add_argument("--fallback", action="store_true", help="Use LLM fallback for unknown or empty responses")
+    # --- 🆕 Step-8 Visualization flags ---
+    p.add_argument("--plot", choices=["auto", "form", "h2h", "venue-ratio"],
+                   help="Generate broadcast-style plot (auto | form | h2h | venue-ratio)")
+    p.add_argument("--players", nargs="+",
+                   help="Player(s) for plotting (one for form; two for h2h)")
+    p.add_argument("--team",
+                   help="Team name (required for venue-ratio plots)")
+
     args = p.parse_args()
     q = " ".join(args.question).strip()
+    # --- 🧩 Step-8: LLM-driven visualization routing ---
+    if args.plot:
+        print("🎨 Generating visualization through LLM agent…")
+        agent = CricketAgent(args.backend, args.model, args.semantic_model)
+        # ✅ Always allow fallback during plotting so we can visualize even when IPL data is missing
+        agent.fallback_enabled = True
+        # Step 1: Run LLM/semantic pipeline to get structured result
+        res = agent.run(q)
+
+        # Step 2: Find last executed tool (if any)
+        if not res.get("trace"):
+            print("❌ No structured result found for visualization.")
+            sys.exit(1)
+
+        last_step = next((s for s in reversed(res["trace"]) if "result" in s), None)
+        if not last_step or "result" not in last_step:
+            print("❌ No tool result available for plotting.")
+            sys.exit(1)
+
+        result_data = last_step["result"]
+        act = last_step.get("action")
+
+        # Step 3: Generate visualization from tool result
+        if args.plot == "auto":
+            saved_path = visuals.auto_plot_from_result(result_data, act)
+        else:
+            saved_path = visuals.generate_plot_from_result(result_data, act, plot_type=args.plot)
+        print(f"✅ Plot saved at: {saved_path}")
+        return
+
     if not q:
         print("Please provide a question."); sys.exit(1)
     agent = CricketAgent(args.backend, args.model, args.semantic_model)

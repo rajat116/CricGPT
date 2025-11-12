@@ -1,96 +1,132 @@
 """
-cricket_tools/llm_fallback.py
-=============================
-Provider-agnostic LLM fallback + rephrasing utilities.
+llm_fallback.py — Structured fallback for each query type (Step-8)
 """
 
 from __future__ import annotations
-import json
-import re
-import logging
+import json, re, logging
 from typing import Dict, Any
+from .config import get_llm_client
 
-# ✅ Add this block:
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     pass
 
-from .config import get_llm_client
-
 log = logging.getLogger("LLMFallback")
 
 # ---------------------------------------------------------------------
-# 🧠 1. Generic LLM call helper
-# ---------------------------------------------------------------------
 def _call_llm(prompt: str) -> str:
-    """
-    Send a plain text prompt to whichever LLM provider is configured.
-    Returns the raw text response (never raises).
-    """
     try:
         provider, model, client = get_llm_client()
         if provider == "gemini":
             model_obj = client.GenerativeModel(model)
             resp = model_obj.generate_content(prompt)
             return resp.text.strip()
-
         elif provider == "ollama":
-            import requests
             url = f"{client.base_url}/api/generate"
             payload = {"model": model, "prompt": prompt}
             r = client.post(url, json=payload, timeout=60)
             return r.json().get("response", "").strip()
-
-        else:  # openai / default
+        else:
             resp = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.4,
             )
             return resp.choices[0].message.content.strip()
-
     except Exception as e:
         log.warning(f"LLM call failed: {e}")
-        return "(LLM fallback unavailable)"
+        return "(LLM unavailable)"
 
 # ---------------------------------------------------------------------
-# 🪄 2. Rephrase vague question (for display / retry)
-# ---------------------------------------------------------------------
-def llm_rephrase(question: str, context: Dict[str, Any] | None = None) -> str:
+def llm_fallback_answer(question: str, trace: list | None = None, action: str | None = None) -> Dict[str, Any]:
     """
-    Ask the LLM to rephrase the user's question clearly,
-    optionally enriching with current context.
-    """
-    ctx = ""
-    if context:
-        ctx = f"\nContext: {json.dumps(context, ensure_ascii=False)}"
-    prompt = (
-        f"Rephrase this cricket-related question clearly and completely,"
-        f" preserving meaning but adding missing specifics if possible.{ctx}\n\n"
-        f"Question: {question}"
-    )
-    return _call_llm(prompt)
-
-# ---------------------------------------------------------------------
-# 💬 3. Fallback answer when no structured tool result
-# ---------------------------------------------------------------------
-def llm_fallback_answer(question: str, trace: list | None = None) -> Dict[str, Any]:
-    """
-    Ask the LLM directly to answer the cricket question.
-    Returns a dict similar to other tool outputs:
-      { 'status': 'final', 'answer': '<text>', 'trace': [...] }
+    Structured LLM fallback: emits JSON in schema consistent with intended tool/action.
     """
     trace = trace or []
-    prompt = (
-        "You are a cricket expert. Answer concisely but informatively.\n\n"
-        f"User question: {question}"
-    )
-    text = _call_llm(prompt)
-    trace.append({"action": "llm_fallback", "thought": "No structured tool matched", "answer": text})
-    return {"status": "final", "answer": text, "trace": trace}
+    act = (action or "").lower()
 
-if __name__ == "__main__":
-    q = "Who scored the most runs for India in World Cup 2023?"
-    print(llm_fallback_answer(q))
+    # --- 1️⃣ Choose schema template based on action ---
+    if "team" in act:
+        schema = {
+            "team": "<team name>",
+            "matches": "<int>",
+            "wins": "<int>",
+            "losses": "<int>",
+            "run_rate": "<float>",
+            "top_scorer": "<name>",
+            "comment": "<short summary>",
+        }
+        task = "Provide IPL team performance summary in JSON."
+    elif "compare" in act:
+        schema = {
+            "playerA": {"name": "<str>", "runs": "<int>", "avg": "<float>", "strike_rate": "<float>"},
+            "playerB": {"name": "<str>", "runs": "<int>", "avg": "<float>", "strike_rate": "<float>"},
+            "comparison": "<short text>",
+        }
+        task = "Compare two IPL players' batting performance."
+    elif "top" in act:
+        schema = {
+            "metric": "<runs_batter or wickets>",
+            "season": "<year>",
+            "players": [{"name": "<str>", "value": "<float>"}],
+            "comment": "<short note>",
+        }
+        task = "List top IPL players for the given metric."
+    else:
+        # default = player stats
+        schema = {
+            "player": "<name>",
+            "matches": "<int>",
+            "runs": "<int>",
+            "avg": "<float>",
+            "strike_rate": "<float>",
+            "fours": "<int>",
+            "sixes": "<int>",
+            "wickets": "<int>",
+            "economy": "<float>",
+            "comment": "<short summary>",
+        }
+        task = "Provide IPL player performance summary."
+
+    # --- 2️⃣ LLM prompt ---
+    prompt = f"""
+You are a cricket analytics assistant. Answer the following query about IPL cricket.
+
+Always respond with ONLY a valid JSON (no markdown fences, no prose) 
+matching this schema:
+{json.dumps(schema, indent=2)}
+
+If any field is unknown, set it to null (not empty string).
+
+Question: {question}
+"""
+
+    text = _call_llm(prompt)
+
+    # --- 3️⃣ Parse clean JSON ---
+    clean = re.sub(r"^```(?:json)?", "", text.strip(), flags=re.IGNORECASE)
+    clean = re.sub(r"```$", "", clean).strip("`\n ")
+    try:
+        parsed = json.loads(clean)
+    except Exception as e:
+        log.warning(f"Invalid fallback JSON: {e}\n{text}")
+        parsed = {"comment": text[:200]}
+
+    result = {
+        "status": "final",
+        "action": f"llm_fallback_{act or 'generic'}",
+        "args": {"topic": question},
+        "data": parsed,
+        "answer": parsed.get("comment", text),
+        "reasoning": f"Structured fallback for action={act or 'generic'}",
+        "scope": "General",
+        "trace": trace + [{
+            "action": f"llm_fallback_{act or 'generic'}",
+            "args": {"topic": question},
+            "result": parsed,
+            "thought": f"Structured fallback schema used for {act or 'generic'}"
+        }],
+    }
+    return result

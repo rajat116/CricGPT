@@ -16,9 +16,12 @@ def build_ml_bowling_features():
 
     df = pd.read_parquet(DATA_PATH)
 
+    # ✅ Exclude wides and no-balls for legal deliveries
+    legal_df = df[~df["extras_type"].isin(["wides", "noballs"])]
+
     # Aggregate by bowler
     features = (
-        df.groupby("bowler")
+        legal_df.groupby("bowler")
         .agg(
             matches=("match_id", "nunique"),
             runs_conceded=("runs_total", "sum"),
@@ -30,8 +33,14 @@ def build_ml_bowling_features():
 
     # Derived bowling metrics
     features["overs"] = features["balls"] / 6
-    features["economy"] = features["runs_conceded"] / features["overs"].replace(0, pd.NA)
-    features["wickets_per_match"] = features["wickets"] / features["matches"].replace(0, pd.NA)
+    features["economy"] = features.apply(
+        lambda r: r["runs_conceded"] / r["overs"] if r["overs"] > 0 else float("inf"), axis=1
+    )
+    features["wickets_per_match"] = features.apply(
+        lambda r: r["wickets"] / r["matches"] if r["matches"] > 0 else 0.0, axis=1
+    )
+
+    # Fill missing values where appropriate
     features.fillna(0, inplace=True)
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

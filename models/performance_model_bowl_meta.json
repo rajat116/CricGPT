@@ -1,5 +1,5 @@
 {
-  "created_at": "2025-11-06T17:45:04.321050Z",
+  "created_at": "2025-11-11T23:43:57.603072Z",
   "model_path": "models/performance_model_bowl.pkl",
   "feature_cols": [
     "balls",
@@ -10,8 +10,8 @@
   ],
   "target_col": "wickets_per_match",
   "metrics": {
-    "mse": 0.07767588520164417,
-    "rmse": 0.27870393826001844,
+    "mse": 0.077597,
+    "rmse": 0.279,
     "n_train": 413,
     "n_test": 138
   },

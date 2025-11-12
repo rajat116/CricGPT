@@ -62,6 +62,16 @@ run_test "How did RCB perform at Chinnaswamy in 2018"
 run_test "Show Virat Kohli batting for RCB in 2016"
 run_test "Show RCB performance in Bengaluru"
 
+# -- Fallback reasoning tests (non-IPL context)
+echo "----------------------------------------------------------" | tee -a "$LOGFILE"
+echo "🌍 Testing fallback reasoning (non-IPL queries)" | tee -a "$LOGFILE"
+
+run_test "How did Rohit Sharma perform in 2016 ODI World Cup"
+run_test "Who scored the most centuries in Asia Cup 2023"
+run_test "How many runs did Kohli make in T20 World Cup 2022"
+run_test "Top wicket takers in ICC World Cup 2019"
+run_test "Best batsmen in bilateral series against England"
+
 # ------------------------------------------------------------------
 echo "✅ Batch testing complete."
 echo "Full log saved to: $LOGFILE"

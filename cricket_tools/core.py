@@ -16,6 +16,8 @@ from .stats import (
 )
 from .ml_model import predict_future_performance
 from .ml_build import build_ml_features
+from .entity_matcher import normalize_entity
+
 
 # ---------------------------------------------------------------------
 # 🧩 Entity resolution (NEW)
@@ -81,13 +83,16 @@ def cricket_query(
             sig = inspect.signature(handler)
             call_kwargs = {}
 
-            # 🧠 Resolve fuzzy entities (team / venue / city) if available
+            # 🧠 Resolve fuzzy entities (team / venue / city) if available (robust)
             if _ENTITY_MATCHER:
                 for ent_key in ("team", "venue", "city"):
                     if ent_key in kwargs and kwargs[ent_key]:
-                        resolved = _ENTITY_MATCHER.resolve(kwargs[ent_key], ent_key)
-                        if resolved and isinstance(resolved, list) and "name" in resolved[0]:
-                            kwargs[ent_key] = resolved[0]["name"]
+                        try:
+                            resolved = _ENTITY_MATCHER.resolve(kwargs[ent_key], etype=ent_key, top_k=1)
+                            if resolved and isinstance(resolved, list) and "name" in resolved[0]:
+                                kwargs[ent_key] = resolved[0]["name"]
+                        except Exception:
+                            pass
 
             # Build call kwargs dynamically for flexibility
             for key in ("start", "end", "team", "venue", "city", "season", "metric", "n", "playerA", "playerB"):
@@ -116,11 +121,9 @@ def cricket_query(
         if handler:
             import inspect
             sig = inspect.signature(handler)
-            params = sig.parameters
-            call_kwargs = {"start": start, "end": end, **kwargs}
-            if "dataset_name" in params:
-                call_kwargs["dataset_name"] = ds_name
-
+            # 🩹 FIX: only pass arguments that exist in handler signature
+            base = {"start": start, "end": end}
+            call_kwargs = {k: v for k, v in {**base, **kwargs}.items() if k in sig.parameters}
             data = handler(canon_name, **call_kwargs)
         else:
             data = {"error": f"Unknown role '{role}'."}

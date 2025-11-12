@@ -16,16 +16,13 @@ def build_ml_features():
 
     df = pd.read_parquet(DATA_PATH)
 
-    # Approximate total ball count per batsman
-    df["ball_index"] = df["over"] * 6 + df["ball_in_over"]
-
     # Aggregate by batsman
     features = (
         df.groupby("batsman")
         .agg(
             matches=("match_id", "nunique"),
             runs=("runs_batter", "sum"),
-            balls=("ball_index", "count"),
+            balls=("runs_batter", "count"),  # ✅ simpler & accurate
             dismissals=("wicket_player_out", lambda x: x.notna().sum()),
             fours=("runs_batter", lambda x: (x == 4).sum()),
             sixes=("runs_batter", lambda x: (x == 6).sum()),
@@ -35,9 +32,12 @@ def build_ml_features():
 
     # Derived batting metrics
     features["strike_rate"] = 100 * features["runs"] / features["balls"].clip(lower=1)
-    features["avg"] = features["runs"] / features["dismissals"].replace(0, pd.NA)
-    features.fillna(0, inplace=True)
+    features["avg"] = features.apply(
+        lambda r: r["runs"] / r["dismissals"] if r["dismissals"] > 0 else float("inf"), axis=1
+    )
 
+    # Clean up and save
+    features.fillna(0, inplace=True)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     features.to_parquet(OUT_PATH)
 

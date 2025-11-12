@@ -1,0 +1,1440 @@
+----------------------------------------------------------
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+[2025-11-11 16:37:58] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:37:58] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:38:02] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Mumbai Indians'}
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_batter_stats",
+      "args": {
+        "player": "Rohit Sharma",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Rohit Sharma",
+        "dataset_name": "RG Sharma",
+        "period": "2023-01-01–2023-12-31",
+        "role": "batter",
+        "data": {
+          "player": "Rohit Sharma",
+          "dataset_name": "RG Sharma",
+          "innings": 16,
+          "runs": 332,
+          "balls": 258,
+          "avg": 20.75,
+          "strike_rate": 128.68,
+          "dismissals": 16,
+          "period": "2023-01-01–2023-12-31",
+          "team_filter": "any"
+        }
+      },
+      "thought": "[gemini] get_batter_stats for Rohit Sharma"
+    }
+  ]
+}
+
+
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+[2025-11-11 16:38:19] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:38:19] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:38:23] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Mumbai Indians'}
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_bowler_stats",
+      "args": {
+        "player": "Jasprit Bumrah",
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Jasprit Bumrah",
+        "dataset_name": "JJ Bumrah",
+        "period": "2024-01-01–2024-12-31",
+        "role": "bowler",
+        "data": {
+          "player": "Jasprit Bumrah",
+          "dataset_name": "JJ Bumrah",
+          "overs": 54.7,
+          "runs_conceded": 341,
+          "wickets": 21,
+          "economy": 6.24,
+          "period": "2024-01-01–2024-12-31",
+          "team_filter": "any",
+          "rows": 328
+        }
+      },
+      "thought": "[gemini] get_bowler_stats for Jasprit Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+[2025-11-11 16:38:40] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:38:40] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:38:43] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Mumbai Indians', 'start': '2024-01-01', 'end': '2024-12-31'}
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "KL Rahul",
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "KL Rahul",
+        "dataset_name": "KL Rahul",
+        "period": "2024-01-01–2024-12-31",
+        "role": "predict",
+        "data": {
+          "player": "KL Rahul",
+          "dataset_name": "KL Rahul",
+          "batting_prediction": {
+            "predicted_runs_per_match": 37.1,
+            "inputs": {
+              "balls": 3947.0,
+              "dismissals": 115.0,
+              "fours": 453.0,
+              "sixes": 208.0,
+              "strike_rate": 132.63237902204204,
+              "avg": 45.52173913043478
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-06T17:45:03.832398Z"
+          }
+        }
+      },
+      "thought": "[gemini] predict_performance for KL Rahul"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+[2025-11-11 16:39:00] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:39:00] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:39:03] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Mumbai Indians'}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 118.25it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 64.15it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 50.67it/s]
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Mumbai Indians', 'venue': 'Chepuk'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Rohit",
+        "playerB": "Virat",
+        "team": "Mumbai Indians",
+        "venue": "Chepuk",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2023-01-01–2023-12-31",
+        "data": {
+          "comparison": {
+            "Rohit Sharma": {
+              "runs": 322,
+              "avg": 24.77,
+              "sr": 117.95,
+              "wickets": 0,
+              "eco": 11.5,
+              "matches": 14
+            },
+            "Virat": {
+              "error": "player_not_found",
+              "hint": "Your query 'Virat' is ambiguous. Did you mean: **Virat Singh**, **Virat Kohli**?"
+            },
+            "info": "Data unavailable for one player; showing available stats for Rohit Sharma only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Mumbai Indians",
+            "venue": "M. A. Chidambaram Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Rohit"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+[2025-11-11 16:39:20] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:39:20] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:39:22] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Mumbai Indians', 'start': '2023-01-01', 'end': '2023-12-31'}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 75.56it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 89.44it/s]
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Mumbai Indians', 'venue': 'Ahmedabad'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Dhoni",
+        "playerB": "Gill",
+        "team": "Mumbai Indians",
+        "venue": "Ahmedabad",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2023-01-01–2023-12-31",
+        "data": {
+          "comparison": {
+            "MS Dhoni": {
+              "note": "no data in selected filters"
+            },
+            "Shubman Gill": {
+              "runs": 254,
+              "avg": 63.5,
+              "sr": 169.33,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 4
+            },
+            "info": "Data unavailable for one player; showing available stats for Shubman Gill only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Mumbai Indians",
+            "venue": "Narendra Modi Stadium, Ahmedabad",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Dhoni"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+[2025-11-11 16:39:39] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:39:39] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:39:45] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Mumbai Indians', 'venue': 'Ahmedabad'}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 117.49it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 125.35it/s]
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Mumbai Indians', 'venue': 'Ahmedabad'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Bumrah",
+        "playerB": "Shami",
+        "team": "Mumbai Indians",
+        "venue": "Ahmedabad",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "comparison": {
+            "Jasprit Bumrah": {
+              "runs": 1,
+              "avg": "∞",
+              "sr": 100.0,
+              "wickets": 3,
+              "eco": 6.88,
+              "matches": 2
+            },
+            "Mohammed Shami": {
+              "runs": 0,
+              "avg": "∞",
+              "sr": 0,
+              "wickets": 2,
+              "eco": 8.23,
+              "matches": 2
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Mumbai Indians",
+            "venue": "Narendra Modi Stadium, Ahmedabad",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+[2025-11-11 16:40:02] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:40:02] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:40:05] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'start': '2025-01-01', 'end': '2025-11-11'}
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'MI', 'venue': 'Wankhede'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "MI",
+        "venue": "Wankhede",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "team": "Mumbai Indians",
+          "matches": 92,
+          "total_runs": 15367,
+          "wickets_taken": 597,
+          "wins": 56,
+          "win_ratio": 60.87,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": null,
+            "venue": "Wankhede Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for MI"
+    }
+  ]
+}
+
+
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+[2025-11-11 16:40:22] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:40:22] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:40:26] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'venue': 'Wankhede'}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 87.47it/s]
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Chennai Super Kings', 'venue': 'Wankhede'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "Chennai Super Kings",
+        "venue": "Wankhede",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2020-01-01–2020-12-31",
+        "data": {
+          "team": "Chennai Super Kings",
+          "matches": 26,
+          "total_runs": 4165,
+          "wickets_taken": 147,
+          "wins": 13,
+          "win_ratio": 50.0,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": null,
+            "venue": "Wankhede Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for Chennai Super Kings"
+    }
+  ]
+}
+
+
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+[2025-11-11 16:40:43] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:40:43] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:40:46] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'venue': 'Wankhede'}
+[2025-11-11 16:40:46] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Team performance of RCB in Banglore 2019"
+  },
+  "data": {
+    "player": null,
+    "team": "Royal Challengers Bangalore",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "In IPL 2019, Royal Challengers Bangalore played 7 home matches in Bangalore, winning 2 and losing 5. They finished last in the tournament standings."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nIn IPL 2019, Royal Challengers Bangalore played 7 home matches in Bangalore, winning 2 and losing 5. They finished last in the tournament standings.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Team performance of RCB in Banglore 2019"
+      },
+      "result": {
+        "player": null,
+        "team": "Royal Challengers Bangalore",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "In IPL 2019, Royal Challengers Bangalore played 7 home matches in Bangalore, winning 2 and losing 5. They finished last in the tournament standings."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+[2025-11-11 16:41:11] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:41:11] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:41:20] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'venue': 'Wankhede'}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 119.51it/s]
+[2025-11-11 16:41:20] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Top 5 run scorers in Chennai 2021"
+  },
+  "data": {
+    "player": "Nitish Rana",
+    "team": "Kolkata Knight Riders",
+    "runs": 155,
+    "avg": 51.66,
+    "strike_rate": 122.04,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "Nitish Rana was the top run-scorer in Chennai during the 2021 IPL season. The top 5 run-scorers at the venue were: Nitish Rana (155 runs), Jonny Bairstow (136 runs), Glenn Maxwell (133 runs), David Warner (117 runs), and AB de Villiers (111 runs)."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nNitish Rana was the top run-scorer in Chennai during the 2021 IPL season. The top 5 run-scorers at the venue were: Nitish Rana (155 runs), Jonny Bairstow (136 runs), Glenn Maxwell (133 runs), David Warner (117 runs), and AB de Villiers (111 runs).",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Top 5 run scorers in Chennai 2021"
+      },
+      "result": {
+        "player": "Nitish Rana",
+        "team": "Kolkata Knight Riders",
+        "runs": 155,
+        "avg": 51.66,
+        "strike_rate": 122.04,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "Nitish Rana was the top run-scorer in Chennai during the 2021 IPL season. The top 5 run-scorers at the venue were: Nitish Rana (155 runs), Jonny Bairstow (136 runs), Glenn Maxwell (133 runs), David Warner (117 runs), and AB de Villiers (111 runs)."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+[2025-11-11 16:41:48] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:41:48] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:41:50] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'city': 'Chennai', 'season': '2021', 'start': '2019-01-01', 'end': '2019-12-31', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 119.89it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 125.16it/s]
+[2025-11-11 16:41:50] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Top wicket takers at Eden Gardens"
+  },
+  "data": {
+    "player": "Anil Kumble",
+    "team": null,
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": 49,
+    "economy": null,
+    "centuries": null,
+    "comment": "Anil Kumble is the leading wicket-taker at Eden Gardens, with 49 wickets in Test matches played at the venue."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nAnil Kumble is the leading wicket-taker at Eden Gardens, with 49 wickets in Test matches played at the venue.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Top wicket takers at Eden Gardens"
+      },
+      "result": {
+        "player": "Anil Kumble",
+        "team": null,
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": 49,
+        "economy": null,
+        "centuries": null,
+        "comment": "Anil Kumble is the leading wicket-taker at Eden Gardens, with 49 wickets in Test matches played at the venue."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+[2025-11-11 16:42:19] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:42:19] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:42:31] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'venue': 'Eden Gardens', 'city': 'Chennai', 'start': '2019-01-01', 'end': '2019-12-31', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 121.12it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 127.49it/s]
+[2025-11-11 16:42:31] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Who scored the most runs for Mumbai Indians last season"
+  },
+  "data": {
+    "player": "Tilak Varma",
+    "team": "Mumbai Indians",
+    "runs": 343,
+    "avg": 42.87,
+    "strike_rate": 164.1,
+    "wickets": null,
+    "economy": null,
+    "centuries": 0,
+    "comment": "Tilak Varma was the highest run-scorer for Mumbai Indians in the last IPL season (2023), scoring 343 runs at an average of 42.87 and a strike rate of 164.1."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nTilak Varma was the highest run-scorer for Mumbai Indians in the last IPL season (2023), scoring 343 runs at an average of 42.87 and a strike rate of 164.1.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Who scored the most runs for Mumbai Indians last season"
+      },
+      "result": {
+        "player": "Tilak Varma",
+        "team": "Mumbai Indians",
+        "runs": 343,
+        "avg": 42.87,
+        "strike_rate": 164.1,
+        "wickets": null,
+        "economy": null,
+        "centuries": 0,
+        "comment": "Tilak Varma was the highest run-scorer for Mumbai Indians in the last IPL season (2023), scoring 343 runs at an average of 42.87 and a strike rate of 164.1."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+[2025-11-11 16:42:54] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:42:54] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:42:55] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'city': 'Chennai', 'season': 'last season', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 120.19it/s]
+[2025-11-11 16:42:56] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Top players in Chepuk stadium"
+  },
+  "data": {
+    "player": "MS Dhoni",
+    "team": "Chennai Super Kings",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "MS Dhoni is an iconic figure at Chepauk Stadium, leading CSK to multiple IPL titles. While exact stadium stats vary, his captaincy, finishing prowess, and immense impact have made him one of the most successful and beloved players at this venue."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nMS Dhoni is an iconic figure at Chepauk Stadium, leading CSK to multiple IPL titles. While exact stadium stats vary, his captaincy, finishing prowess, and immense impact have made him one of the most successful and beloved players at this venue.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Top players in Chepuk stadium"
+      },
+      "result": {
+        "player": "MS Dhoni",
+        "team": "Chennai Super Kings",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "MS Dhoni is an iconic figure at Chepauk Stadium, leading CSK to multiple IPL titles. While exact stadium stats vary, his captaincy, finishing prowess, and immense impact have made him one of the most successful and beloved players at this venue."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+[2025-11-11 16:43:34] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:43:34] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:43:36] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'RCB', 'city': 'Chennai', 'season': 'last season', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 122.27it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 63.52it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 45.74it/s]
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Chennai'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Kohli",
+        "playerB": "Rohit",
+        "team": "RCB",
+        "venue": "Chinnaswamy",
+        "city": "Chennai",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2019-01-01–2019-12-31",
+        "data": {
+          "comparison": {
+            "Kohli": {
+              "error": "player_not_found",
+              "hint": "Your query 'Kohli' is ambiguous. Did you mean: **Virat Kohli**, **Taruwar Kohli**?"
+            },
+            "Rohit Sharma": {
+              "note": "no data in selected filters"
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Royal Challengers Bengaluru",
+            "venue": "M. Chinnaswamy Stadium",
+            "city": "Chennai"
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Kohli"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+[2025-11-11 16:43:54] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:43:54] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:43:56] [INFO   ] 🧠 Using memory: {'playerA': 'Kohli', 'playerB': 'Rohit', 'team': 'RCB', 'city': 'Chennai', 'season': 'last season', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 5}
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "Shubman Gill",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Shubman Gill",
+        "dataset_name": "Shubman Gill",
+        "period": "2019-01-01–2019-12-31",
+        "role": "predict",
+        "data": {
+          "player": "Shubman Gill",
+          "dataset_name": "Shubman Gill",
+          "batting_prediction": {
+            "predicted_runs_per_match": 33.94,
+            "inputs": {
+              "balls": 2867.0,
+              "dismissals": 98.0,
+              "fours": 372.0,
+              "sixes": 119.0,
+              "strike_rate": 134.8447854900593,
+              "avg": 39.44897959183673
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-06T17:45:03.832398Z"
+          }
+        }
+      },
+      "thought": "[gemini] predict_performance for Shubman Gill"
+    }
+  ]
+}
+
+
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+[2025-11-11 16:44:13] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:44:13] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:44:17] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'venue': 'Chinnaswamy', 'city': 'Chennai', 'season': 'last season', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 121.78it/s]
+[2025-11-11 16:44:18] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "How did SRH do this year"
+  },
+  "data": {
+    "player": null,
+    "team": "Sunrisers Hyderabad (SRH)",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "Sunrisers Hyderabad had a remarkable IPL 2024 season, finishing second in the league stage and reaching the final. They were known for their aggressive batting, breaking records for the highest team totals, though they ultimately lost in the final to KKR."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nSunrisers Hyderabad had a remarkable IPL 2024 season, finishing second in the league stage and reaching the final. They were known for their aggressive batting, breaking records for the highest team totals, though they ultimately lost in the final to KKR.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "How did SRH do this year"
+      },
+      "result": {
+        "player": null,
+        "team": "Sunrisers Hyderabad (SRH)",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "Sunrisers Hyderabad had a remarkable IPL 2024 season, finishing second in the league stage and reaching the final. They were known for their aggressive batting, breaking records for the highest team totals, though they ultimately lost in the final to KKR."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+[2025-11-11 16:44:42] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:44:42] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:44:44] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'venue': 'Chinnaswamy', 'season': 'last season', 'start': '2025-01-01', 'end': '2025-11-11', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 121.24it/s]
+[2025-11-11 16:44:44] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Show KKR performance in Kolkata"
+  },
+  "data": {
+    "player": null,
+    "team": "KKR",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "KKR has historically had a strong home record at Eden Gardens, Kolkata, making it a formidable fortress for them over the years in the IPL."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nKKR has historically had a strong home record at Eden Gardens, Kolkata, making it a formidable fortress for them over the years in the IPL.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Show KKR performance in Kolkata"
+      },
+      "result": {
+        "player": null,
+        "team": "KKR",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "KKR has historically had a strong home record at Eden Gardens, Kolkata, making it a formidable fortress for them over the years in the IPL."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Who are best batsmen at M. A. Chidambaram Stadium
+----------------------------------------------------------------------
+[2025-11-11 16:45:16] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:45:16] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:45:20] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'team': 'KKR', 'city': 'Kolkata', 'season': 'last season', 'start': '2025-01-01', 'end': '2025-11-11', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 90.82it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 125.11it/s]
+[2025-11-11 16:45:20] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Who are best batsmen at M. A. Chidambaram Stadium
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Who are best batsmen at M. A. Chidambaram Stadium"
+  },
+  "data": {
+    "player": null,
+    "team": null,
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "M. A. Chidambaram Stadium, a strong fortress for CSK, has seen excellent performances from batsmen like Suresh Raina, MS Dhoni, and Michael Hussey, who have consistently delivered match-winning innings there."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nM. A. Chidambaram Stadium, a strong fortress for CSK, has seen excellent performances from batsmen like Suresh Raina, MS Dhoni, and Michael Hussey, who have consistently delivered match-winning innings there.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Who are best batsmen at M. A. Chidambaram Stadium"
+      },
+      "result": {
+        "player": null,
+        "team": null,
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "M. A. Chidambaram Stadium, a strong fortress for CSK, has seen excellent performances from batsmen like Suresh Raina, MS Dhoni, and Michael Hussey, who have consistently delivered match-winning innings there."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Dhoni and Pant at Delhi in 2020
+----------------------------------------------------------------------
+[2025-11-11 16:46:47] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:46:47] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:46:52] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'team': 'KKR', 'venue': 'M. A. Chidambaram Stadium', 'city': 'Kolkata', 'season': 'last season', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 89.31it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 122.40it/s]
+
+❓ Query: Compare Dhoni and Pant at Delhi in 2020
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'KKR', 'venue': 'M. A. Chidambaram Stadium', 'city': 'Kolkata'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Dhoni",
+        "playerB": "Pant",
+        "team": "KKR",
+        "venue": "M. A. Chidambaram Stadium",
+        "city": "Kolkata",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2020-01-01–2020-12-31",
+        "data": {
+          "comparison": {
+            "MS Dhoni": {
+              "note": "no data in selected filters"
+            },
+            "Rishabh Pant": {
+              "note": "no data in selected filters"
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Kolkata Knight Riders",
+            "venue": "MA Chidambaram Stadium",
+            "city": "Kolkata"
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Dhoni"
+    }
+  ]
+}
+
+
+
+❓ Query: How did RCB perform at Chinnaswamy in 2018
+----------------------------------------------------------------------
+[2025-11-11 16:47:09] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:47:09] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:47:16] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Dhoni', 'playerB': 'Pant', 'city': 'Kolkata', 'season': 'last season', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 84.35it/s]
+[2025-11-11 16:47:17] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: How did RCB perform at Chinnaswamy in 2018
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "How did RCB perform at Chinnaswamy in 2018"
+  },
+  "data": {
+    "player": null,
+    "team": "RCB",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "RCB won 4 out of their 7 home matches at Chinnaswamy Stadium in the IPL 2018 season, recording wins against KXIP, DD, MI, and SRH, but losing to RR, CSK, and KKR."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nRCB won 4 out of their 7 home matches at Chinnaswamy Stadium in the IPL 2018 season, recording wins against KXIP, DD, MI, and SRH, but losing to RR, CSK, and KKR.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "How did RCB perform at Chinnaswamy in 2018"
+      },
+      "result": {
+        "player": null,
+        "team": "RCB",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "RCB won 4 out of their 7 home matches at Chinnaswamy Stadium in the IPL 2018 season, recording wins against KXIP, DD, MI, and SRH, but losing to RR, CSK, and KKR."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Show Virat Kohli batting for RCB in 2016
+----------------------------------------------------------------------
+[2025-11-11 16:48:13] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:48:13] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:48:25] [INFO   ] 🧠 Using memory: {'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Kolkata', 'season': 'last season', 'metric': 'runs', 'n': 5}
+
+❓ Query: Show Virat Kohli batting for RCB in 2016
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_batter_stats",
+      "args": {
+        "player": "Virat Kohli",
+        "start": "2016-01-01",
+        "end": "2016-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Virat Kohli",
+        "dataset_name": "V Kohli",
+        "period": "2016-01-01–2016-12-31",
+        "role": "batter",
+        "data": {
+          "player": "Virat Kohli",
+          "dataset_name": "V Kohli",
+          "innings": 16,
+          "runs": 973,
+          "balls": 655,
+          "avg": 81.08,
+          "strike_rate": 148.55,
+          "dismissals": 12,
+          "period": "2016-01-01–2016-12-31",
+          "team_filter": "any"
+        }
+      },
+      "thought": "[gemini] get_batter_stats for Virat Kohli"
+    }
+  ]
+}
+
+
+
+❓ Query: Show RCB performance in Bengaluru
+----------------------------------------------------------------------
+[2025-11-11 16:48:42] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:48:42] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:48:44] [INFO   ] 🧠 Using memory: {'player': 'Virat Kohli', 'playerA': 'Dhoni', 'playerB': 'Pant', 'venue': 'Chinnaswamy', 'season': 'last season', 'start': '2016-01-01', 'end': '2016-12-31', 'metric': 'runs', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 119.27it/s]
+
+❓ Query: Show RCB performance in Bengaluru
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "RCB",
+        "venue": "Chinnaswamy",
+        "city": "Bengaluru",
+        "start": "2016-01-01",
+        "end": "2016-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2016-01-01–2016-12-31",
+        "data": {
+          "team": "Royal Challengers Bengaluru",
+          "matches": 12,
+          "total_runs": 2177,
+          "wickets_taken": 69,
+          "wins": 6,
+          "win_ratio": 50.0,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": null,
+            "venue": "M. Chinnaswamy Stadium",
+            "city": "Bengaluru"
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for RCB"
+    }
+  ]
+}
+
+
+----------------------------------------------------------
+🌍 Testing fallback reasoning (non-IPL queries)
+
+❓ Query: How did Rohit Sharma perform in 2016 ODI World Cup
+----------------------------------------------------------------------
+[2025-11-11 16:49:01] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:49:01] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:49:19] [INFO   ] 🧠 Using memory: {'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru', 'season': 'last season', 'metric': 'runs', 'n': 5}
+
+❓ Query: How did Rohit Sharma perform in 2016 ODI World Cup
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_batter_stats",
+      "args": {
+        "player": "Rohit Sharma",
+        "start": "2016-01-01",
+        "end": "2016-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Rohit Sharma",
+        "dataset_name": "RG Sharma",
+        "period": "2016-01-01–2016-12-31",
+        "role": "batter",
+        "data": {
+          "player": "Rohit Sharma",
+          "dataset_name": "RG Sharma",
+          "innings": 14,
+          "runs": 489,
+          "balls": 372,
+          "avg": 44.45,
+          "strike_rate": 131.45,
+          "dismissals": 11,
+          "period": "2016-01-01–2016-12-31",
+          "team_filter": "any"
+        }
+      },
+      "thought": "[gemini] get_batter_stats for Rohit Sharma"
+    }
+  ]
+}
+
+
+
+❓ Query: Who scored the most centuries in Asia Cup 2023
+----------------------------------------------------------------------
+[2025-11-11 16:49:36] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:49:36] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:49:40] [INFO   ] 🧠 Using memory: {'player': 'Rohit Sharma', 'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 113.86it/s]
+[2025-11-11 16:49:40] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Who scored the most centuries in Asia Cup 2023
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Who scored the most centuries in Asia Cup 2023"
+  },
+  "data": {
+    "player": "Shubman Gill",
+    "team": "India",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": 1,
+    "comment": "Shubman Gill, along with several other players (Babar Azam, Iftikhar Ahmed, Virat Kohli, KL Rahul, and Mehidy Hasan Miraz), scored one century each, which was the highest count in the Asia Cup 2023 tournament."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nShubman Gill, along with several other players (Babar Azam, Iftikhar Ahmed, Virat Kohli, KL Rahul, and Mehidy Hasan Miraz), scored one century each, which was the highest count in the Asia Cup 2023 tournament.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Who scored the most centuries in Asia Cup 2023"
+      },
+      "result": {
+        "player": "Shubman Gill",
+        "team": "India",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": 1,
+        "comment": "Shubman Gill, along with several other players (Babar Azam, Iftikhar Ahmed, Virat Kohli, KL Rahul, and Mehidy Hasan Miraz), scored one century each, which was the highest count in the Asia Cup 2023 tournament."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: How many runs did Kohli make in T20 World Cup 2022
+----------------------------------------------------------------------
+[2025-11-11 16:50:11] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:50:11] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:50:16] [INFO   ] 🧠 Using memory: {'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru', 'season': 'Asia Cup 2023', 'metric': 'centuries', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 63.76it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 45.87it/s]
+[2025-11-11 16:50:16] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: How many runs did Kohli make in T20 World Cup 2022
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "How many runs did Kohli make in T20 World Cup 2022"
+  },
+  "data": {
+    "player": "Virat Kohli",
+    "team": "India",
+    "runs": 296,
+    "avg": 98.66,
+    "strike_rate": 136.4,
+    "wickets": null,
+    "economy": null,
+    "centuries": 0,
+    "comment": "Virat Kohli was the highest run-scorer in the T20 World Cup 2022 with 296 runs from 6 innings, including 4 half-centuries."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nVirat Kohli was the highest run-scorer in the T20 World Cup 2022 with 296 runs from 6 innings, including 4 half-centuries.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "How many runs did Kohli make in T20 World Cup 2022"
+      },
+      "result": {
+        "player": "Virat Kohli",
+        "team": "India",
+        "runs": 296,
+        "avg": 98.66,
+        "strike_rate": 136.4,
+        "wickets": null,
+        "economy": null,
+        "centuries": 0,
+        "comment": "Virat Kohli was the highest run-scorer in the T20 World Cup 2022 with 296 runs from 6 innings, including 4 half-centuries."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Top wicket takers in ICC World Cup 2019
+----------------------------------------------------------------------
+[2025-11-11 16:50:37] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:50:37] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:50:39] [INFO   ] 🧠 Using memory: {'player': 'Kohli', 'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 120.29it/s]
+[2025-11-11 16:50:39] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Top wicket takers in ICC World Cup 2019
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Top wicket takers in ICC World Cup 2019"
+  },
+  "data": {
+    "player": "Mitchell Starc",
+    "team": "Australia",
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": 27,
+    "economy": null,
+    "centuries": null,
+    "comment": "Mitchell Starc was the leading wicket-taker in the ICC World Cup 2019 with 27 wickets."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nMitchell Starc was the leading wicket-taker in the ICC World Cup 2019 with 27 wickets.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Top wicket takers in ICC World Cup 2019"
+      },
+      "result": {
+        "player": "Mitchell Starc",
+        "team": "Australia",
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": 27,
+        "economy": null,
+        "centuries": null,
+        "comment": "Mitchell Starc was the leading wicket-taker in the ICC World Cup 2019 with 27 wickets."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+
+
+❓ Query: Best batsmen in bilateral series against England
+----------------------------------------------------------------------
+[2025-11-11 16:50:58] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 16:50:58] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 16:51:08] [INFO   ] 🧠 Using memory: {'player': 'Kohli', 'playerA': 'Dhoni', 'playerB': 'Pant', 'team': 'RCB', 'venue': 'Chinnaswamy', 'city': 'Bengaluru', 'season': 'ICC World Cup 2019', 'start': '2022-01-01', 'end': '2022-12-31', 'n': 5}
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 117.37it/s]
+[2025-11-11 16:51:08] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+
+❓ Query: Best batsmen in bilateral series against England
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "action": "llm_fallback",
+  "args": {
+    "topic": "Best batsmen in bilateral series against England"
+  },
+  "data": {
+    "player": null,
+    "team": null,
+    "runs": null,
+    "avg": null,
+    "strike_rate": null,
+    "wickets": null,
+    "economy": null,
+    "centuries": null,
+    "comment": "Identifying the 'best' batsman in bilateral series against England is subjective and depends heavily on the format (Test, ODI, T20I) and era considered. Many legendary batsmen have excelled against England across different generations and conditions."
+  },
+  "answer": "📊 No structured data found for this query — using AI reasoning:\n\nIdentifying the 'best' batsman in bilateral series against England is subjective and depends heavily on the format (Test, ODI, T20I) and era considered. Many legendary batsmen have excelled against England across different generations and conditions.",
+  "reasoning": "No structured IPL data found; answered from general cricket knowledge.",
+  "scope": "General",
+  "trace": [
+    {
+      "action": "llm_fallback",
+      "args": {
+        "topic": "Best batsmen in bilateral series against England"
+      },
+      "result": {
+        "player": null,
+        "team": null,
+        "runs": null,
+        "avg": null,
+        "strike_rate": null,
+        "wickets": null,
+        "economy": null,
+        "centuries": null,
+        "comment": "Identifying the 'best' batsman in bilateral series against England is subjective and depends heavily on the format (Test, ODI, T20I) and era considered. Many legendary batsmen have excelled against England across different generations and conditions."
+      },
+      "thought": "Triggered structured fallback reasoning"
+    }
+  ]
+}
+
+

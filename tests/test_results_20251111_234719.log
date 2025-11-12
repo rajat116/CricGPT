@@ -1,0 +1,1773 @@
+----------------------------------------------------------
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+[2025-11-11 23:47:33] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:47:33] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:47:35] [INFO   ] 🧠 Using memory (filtered): {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:47:35] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2023 from start/end
+
+❓ Query: Show Rohit Sharma batting stats in 2023
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_batter_stats",
+      "args": {
+        "player": "Rohit Sharma",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Rohit Sharma",
+        "dataset_name": "RG Sharma",
+        "period": "2023-01-01–2023-12-31",
+        "role": "batter",
+        "data": {
+          "player": "Rohit Sharma",
+          "dataset_name": "RG Sharma",
+          "innings": 16,
+          "runs": 332,
+          "balls": 248,
+          "avg": 20.75,
+          "strike_rate": 133.87,
+          "dismissals": 16,
+          "period": "2023-01-01–2023-12-31",
+          "team_filter": "any"
+        }
+      },
+      "thought": "[gemini] get_batter_stats for Rohit Sharma"
+    }
+  ]
+}
+
+
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+[2025-11-11 23:47:52] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:47:52] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:47:55] [INFO   ] 🧠 Using memory (filtered): {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:47:55] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2024 from start/end
+
+❓ Query: Bowling stats for Jasprit Bumrah last year
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_bowler_stats",
+      "args": {
+        "player": "Jasprit Bumrah",
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Jasprit Bumrah",
+        "dataset_name": "JJ Bumrah",
+        "period": "2024-01-01–2024-12-31",
+        "role": "bowler",
+        "data": {
+          "player": "Jasprit Bumrah",
+          "dataset_name": "JJ Bumrah",
+          "overs": 51.8,
+          "runs_conceded": 341,
+          "wickets": 20,
+          "economy": 6.58,
+          "period": "2024-01-01–2024-12-31",
+          "team_filter": "any",
+          "rows": 328
+        }
+      },
+      "thought": "[gemini] get_bowler_stats for Jasprit Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+[2025-11-11 23:48:11] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:48:11] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:48:14] [INFO   ] 🧠 Using memory (filtered): {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'start': '2024-01-01', 'end': '2024-12-31', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:48:14] [INFO   ] 🧠 Using memory: {'playerA': 'Virat Kohli', 'playerB': 'Rohit Sharma', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'start': '2024-01-01', 'end': '2024-12-31', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2024 from start/end
+
+❓ Query: Predict KL Rahul performance next match
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "KL Rahul",
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "KL Rahul",
+        "dataset_name": "KL Rahul",
+        "period": "2024-01-01–2024-12-31",
+        "role": "predict",
+        "data": {
+          "player": "KL Rahul",
+          "dataset_name": "unknown",
+          "batting_prediction": {
+            "predicted_runs_per_match": 37.1,
+            "inputs": {
+              "balls": 3947.0,
+              "dismissals": 115.0,
+              "fours": 453.0,
+              "sixes": 208.0,
+              "strike_rate": 132.63237902204204,
+              "avg": 45.52173913043478
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-11T23:43:57.131103Z"
+          }
+        }
+      },
+      "thought": "[gemini] predict_performance for KL Rahul"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+[2025-11-11 23:48:31] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:48:31] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:48:33] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:48:33] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2023 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.45it/s]
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bangalore, venue=M. A. Chidambaram Stadium, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 23.28it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.33it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.61it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.63it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.15it/s]
+[DEBUG] After team filter (Royal Challengers Bangalore): 63632 rows (removed 214573)
+[DEBUG] After player filter (RG Sharma): 664 rows (removed 62968)
+[DEBUG] After location filter: 36 rows (removed 628)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 64.27it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 51.74it/s]
+
+❓ Query: Compare Rohit and Virat in Chepuk 2023
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Royal Challengers Bangalore', 'venue': 'Chepuk'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Rohit",
+        "playerB": "Virat",
+        "team": "Royal Challengers Bangalore",
+        "venue": "Chepuk",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2023-01-01–2023-12-31",
+        "data": {
+          "comparison": {
+            "Rohit Sharma": {
+              "runs": 32,
+              "avg": 32.0,
+              "sr": 106.67,
+              "wickets": 0,
+              "eco": 14.0,
+              "matches": 2
+            },
+            "Virat": {
+              "error": "player_not_found",
+              "hint": "Your query 'Virat' is ambiguous. Did you mean: **Virat Singh**, **Virat Kohli**?"
+            },
+            "info": "Data unavailable for one player; showing available stats for Rohit Sharma only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Royal Challengers Bangalore",
+            "venue": "M. A. Chidambaram Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Rohit"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+[2025-11-11 23:48:52] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:48:52] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:48:54] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'start': '2023-01-01', 'end': '2023-12-31', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:48:54] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'start': '2023-01-01', 'end': '2023-12-31', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2023 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.76it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 126.68it/s]
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bangalore, venue=Narendra Modi Stadium, Ahmedabad, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 24.03it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.41it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.70it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.95it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 106.00it/s]
+[DEBUG] After team filter (Royal Challengers Bangalore): 63632 rows (removed 214573)
+[DEBUG] After player filter (MS Dhoni): 655 rows (removed 62977)
+[DEBUG] After location filter: 0 rows (removed 655)
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bangalore, venue=Narendra Modi Stadium, Ahmedabad, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 108.91it/s]
+[DEBUG] After team filter (Royal Challengers Bangalore): 63632 rows (removed 214573)
+[DEBUG] After player filter (Shubman Gill): 243 rows (removed 63389)
+[DEBUG] After location filter: 19 rows (removed 224)
+
+❓ Query: Compare Dhoni and Gill in Ahmedabad
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Royal Challengers Bangalore', 'venue': 'Ahmedabad'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Dhoni",
+        "playerB": "Gill",
+        "team": "Royal Challengers Bangalore",
+        "venue": "Ahmedabad",
+        "start": "2023-01-01",
+        "end": "2023-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2023-01-01–2023-12-31",
+        "data": {
+          "comparison": {
+            "MS Dhoni": {
+              "note": "no data in selected filters"
+            },
+            "Shubman Gill": {
+              "runs": 16,
+              "avg": 16.0,
+              "sr": 84.21,
+              "wickets": 0,
+              "eco": 0,
+              "matches": 1
+            },
+            "info": "Data unavailable for one player; showing available stats for Shubman Gill only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Royal Challengers Bangalore",
+            "venue": "Narendra Modi Stadium, Ahmedabad",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Dhoni"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+[2025-11-11 23:49:12] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:49:12] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:49:15] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:49:15] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'Royal Challengers Bangalore', 'season': '2019', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2025 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 108.76it/s]
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bangalore, venue=None, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 23.62it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.39it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.71it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.87it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 98.75it/s]
+[DEBUG] After team filter (Royal Challengers Bangalore): 63632 rows (removed 214573)
+[DEBUG] After player filter (JJ Bumrah): 499 rows (removed 63133)
+[DEBUG] After location filter: 499 rows (removed 0)
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bangalore, venue=None, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.63it/s]
+[DEBUG] After team filter (Royal Challengers Bangalore): 63632 rows (removed 214573)
+[DEBUG] After player filter (Mohammed Shami): 311 rows (removed 63321)
+[DEBUG] After location filter: 311 rows (removed 0)
+
+❓ Query: Compare Bumrah vs Shami this year
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Royal Challengers Bangalore'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Bumrah",
+        "playerB": "Shami",
+        "team": "Royal Challengers Bangalore",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "comparison": {
+            "Jasprit Bumrah": {
+              "runs": 7,
+              "avg": 7.0,
+              "sr": 63.64,
+              "wickets": 29,
+              "eco": 7.8,
+              "matches": 20
+            },
+            "Mohammed Shami": {
+              "runs": 22,
+              "avg": 22.0,
+              "sr": 220.0,
+              "wickets": 14,
+              "eco": 9.55,
+              "matches": 13
+            }
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Royal Challengers Bangalore",
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Bumrah"
+    }
+  ]
+}
+
+
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+[2025-11-11 23:49:33] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:49:33] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:49:35] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2019', 'start': '2025-01-01', 'end': '2025-11-11', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:49:35] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2019', 'start': '2025-01-01', 'end': '2025-11-11', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2025 from start/end
+[DEBUG] get_team_stats called with team=Mumbai Indians, start=None, end=None, season=2025, venue=Wankhede Stadium, city=None
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 23.37it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.16it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.32it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.80it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 120.99it/s]
+[DEBUG] normalize_entity → Mumbai Indians
+[DEBUG] Team variants → ['Mumbai Indians']
+[DEBUG] Dataset loaded: 278205 rows, seasons=['2008', '2009', '2010'] ... ['2023', '2024', '2025']
+[DEBUG] apply_filters() called with season=2025, start=None, end=None, team=None, venue=Wankhede Stadium, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2025): 17285 rows
+[DEBUG] After location filter: 1632 rows (removed 15653)
+[DEBUG] After apply_filters: 1632 rows (removed 276573)
+[DEBUG] After restricting to team variants: 1632 rows
+[DEBUG] Computed aggregates: matches=7, wins=5, win_ratio=71.43
+
+❓ Query: Show MI performance at Wankhede
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'MI', 'venue': 'Wankhede'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "MI",
+        "venue": "Wankhede",
+        "season": "2025",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "team": "Mumbai Indians",
+          "matches": 7,
+          "total_runs": 1223,
+          "wickets_taken": 52,
+          "wins": 5,
+          "win_ratio": 71.43,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": "2025",
+            "venue": "Wankhede Stadium",
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for MI"
+    }
+  ]
+}
+
+
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+[2025-11-11 23:49:53] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:49:53] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:49:55] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2025', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:49:55] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2025', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2020 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 110.95it/s]
+[DEBUG] get_team_stats called with team=Chennai Super Kings, start=None, end=None, season=2020, venue=None, city=None
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 24.12it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.34it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.63it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 22.25it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 112.32it/s]
+[DEBUG] normalize_entity → Chennai Super Kings
+[DEBUG] Team variants → ['Chennai Super Kings']
+[DEBUG] Dataset loaded: 278205 rows, seasons=['2008', '2009', '2010'] ... ['2023', '2024', '2025']
+[DEBUG] apply_filters() called with season=2020, start=None, end=None, team=None, venue=None, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2020): 14559 rows
+[DEBUG] After location filter: 14559 rows (removed 0)
+[DEBUG] After apply_filters: 14559 rows (removed 263646)
+[DEBUG] After restricting to team variants: 3379 rows
+[DEBUG] Computed aggregates: matches=14, wins=6, win_ratio=42.86
+
+❓ Query: How did Chennai Super Kings perform in 2020
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'Chennai Super Kings'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "Chennai Super Kings",
+        "season": "2020",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2020-01-01–2020-12-31",
+        "data": {
+          "team": "Chennai Super Kings",
+          "matches": 14,
+          "total_runs": 2191,
+          "wickets_taken": 75,
+          "wins": 6,
+          "win_ratio": 42.86,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": "2020",
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for Chennai Super Kings"
+    }
+  ]
+}
+
+
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+[2025-11-11 23:50:14] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:50:14] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:50:16] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2020', 'metric': 'runs_batter', 'n': 5}
+[2025-11-11 23:50:16] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'season': '2020', 'metric': 'runs_batter', 'n': 5}
+[DEBUG] Auto-inferred season=2019 from start/end
+[DEBUG] get_team_stats called with team=Royal Challengers Bengaluru, start=None, end=None, season=2019, venue=None, city=Bengaluru
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 23.29it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.32it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.57it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.47it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 78.21it/s]
+[DEBUG] normalize_entity → Royal Challengers Bengaluru
+[DEBUG] Team variants → ['Royal Challengers Bangalore', 'Royal Challengers Bengaluru']
+[DEBUG] Dataset loaded: 278205 rows, seasons=['2008', '2009', '2010'] ... ['2023', '2024', '2025']
+[DEBUG] apply_filters() called with season=2019, start=None, end=None, team=None, venue=None, city=Bengaluru
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2019): 14312 rows
+[DEBUG] After location filter: 1529 rows (removed 12783)
+[DEBUG] After apply_filters: 1529 rows (removed 276676)
+[DEBUG] After restricting to team variants: 1529 rows
+[DEBUG] Computed aggregates: matches=7, wins=3, win_ratio=42.86
+
+❓ Query: Team performance of RCB in Banglore 2019
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'RCB', 'city': 'Bangalore'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "RCB",
+        "city": "Bangalore",
+        "season": "2019",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2019-01-01–2019-12-31",
+        "data": {
+          "team": "Royal Challengers Bengaluru",
+          "matches": 7,
+          "total_runs": 1138,
+          "wickets_taken": 42,
+          "wins": 3,
+          "win_ratio": 42.86,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": "2019",
+            "venue": null,
+            "city": "Bengaluru"
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for RCB"
+    }
+  ]
+}
+
+
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+[2025-11-11 23:50:35] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:50:35] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:50:37] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB'}
+[2025-11-11 23:50:37] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB'}
+[DEBUG] Auto-inferred season=2021 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 123.88it/s]
+[DEBUG] apply_filters() called with season=2021, start=None, end=None, team=None, venue=None, city=Chennai
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2021): 14425 rows
+[DEBUG] After location filter: 2461 rows (removed 11964)
+
+❓ Query: Top 5 run scorers in Chennai 2021
+----------------------------------------------------------------------
+🧭 Resolved entities: {'city': 'Chennai'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "city": "Chennai",
+        "season": "2021",
+        "metric": "runs",
+        "n": 5
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": "2021",
+          "venue": null,
+          "city": "Chennai",
+          "team": null,
+          "top_players": [
+            {
+              "player": "JM Bairstow",
+              "runs_batter": 211
+            },
+            {
+              "player": "RG Sharma",
+              "runs_batter": 201
+            },
+            {
+              "player": "GJ Maxwell",
+              "runs_batter": 176
+            },
+            {
+              "player": "N Rana",
+              "runs_batter": 155
+            },
+            {
+              "player": "SA Yadav",
+              "runs_batter": 154
+            }
+          ]
+        }
+      },
+      "thought": "[gemini] get_top_players for runs"
+    }
+  ]
+}
+
+
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+[2025-11-11 23:50:54] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:50:54] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:50:56] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'season': '2021', 'start': '2019-01-01', 'end': '2019-12-31', 'n': 5}
+[2025-11-11 23:50:56] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'season': '2021', 'start': '2019-01-01', 'end': '2019-12-31', 'n': 5}
+[DEBUG] Auto-inferred season=2019 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 117.56it/s]
+[DEBUG] apply_filters() called with season=2019, start=None, end=None, team=None, venue=Eden Gardens, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2019): 14312 rows
+[DEBUG] After location filter: 1720 rows (removed 12592)
+
+❓ Query: Top wicket takers at Eden Gardens
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Eden Gardens'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "venue": "Eden Gardens",
+        "season": "2019",
+        "metric": "wickets",
+        "n": 5
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "wickets",
+          "season": "2019",
+          "venue": "Eden Gardens",
+          "city": null,
+          "team": null,
+          "top_players": [
+            {
+              "player": "AD Russell",
+              "wickets": 9
+            },
+            {
+              "player": "PP Chawla",
+              "wickets": 7
+            },
+            {
+              "player": "SP Narine",
+              "wickets": 7
+            },
+            {
+              "player": "HF Gurney",
+              "wickets": 4
+            },
+            {
+              "player": "Imran Tahir",
+              "wickets": 4
+            }
+          ]
+        }
+      },
+      "thought": "[gemini] get_top_players for wickets"
+    }
+  ]
+}
+
+
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+[2025-11-11 23:51:13] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:51:13] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:51:22] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'start': '2019-01-01', 'end': '2019-12-31'}
+[2025-11-11 23:51:22] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'start': '2019-01-01', 'end': '2019-12-31'}
+[DEBUG] Auto-inferred season=2019 from start/end
+[DEBUG] apply_filters() called with season=2019, start=None, end=None, team=None, venue=None, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2019): 14312 rows
+[DEBUG] After location filter: 14312 rows (removed 0)
+
+❓ Query: Who scored the most runs for Mumbai Indians last season
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "season": "2019",
+        "metric": "runs",
+        "n": 1
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": "2019",
+          "venue": null,
+          "city": null,
+          "team": null,
+          "top_players": [
+            {
+              "player": "DA Warner",
+              "runs_batter": 692
+            }
+          ]
+        }
+      },
+      "thought": "[gemini] get_top_players for runs"
+    }
+  ]
+}
+
+
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+[2025-11-11 23:51:39] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:51:39] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:51:41] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[2025-11-11 23:51:41] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'playerA': 'Bumrah', 'playerB': 'Shami', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[DEBUG] Auto-inferred season=2019 from start/end
+[DEBUG] apply_filters() called with season=2019, start=None, end=None, team=None, venue=M. A. Chidambaram Stadium, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2019): 14312 rows
+[DEBUG] After location filter: 1884 rows (removed 12428)
+
+❓ Query: Top players in Chepuk stadium
+----------------------------------------------------------------------
+🧭 Resolved entities: {'venue': 'Chepuk stadium'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_top_players",
+      "args": {
+        "venue": "Chepuk stadium",
+        "season": "2019",
+        "metric": "runs",
+        "n": 1
+      },
+      "result": {
+        "status": "ok",
+        "role": "top",
+        "query": "",
+        "period": "start–end",
+        "data": {
+          "metric": "runs",
+          "season": "2019",
+          "venue": "M. A. Chidambaram Stadium",
+          "city": null,
+          "team": null,
+          "top_players": [
+            {
+              "player": "MS Dhoni",
+              "runs_batter": 193
+            }
+          ]
+        }
+      },
+      "thought": "[gemini] get_top_players for None"
+    }
+  ]
+}
+
+
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+[2025-11-11 23:51:58] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:51:58] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:52:01] [INFO   ] 🧠 Using memory (filtered): {'player': 'KL Rahul', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[2025-11-11 23:52:01] [INFO   ] 🧠 Using memory: {'player': 'KL Rahul', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[DEBUG] Auto-inferred season=2019 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 62.98it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 46.66it/s]
+[DEBUG] apply_filters() called with season=None, start=None, end=None, team=Royal Challengers Bengaluru, venue=None, city=None
+[DEBUG] Initial rows: 278205
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 24.01it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.36it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.67it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 22.24it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 100.03it/s]
+[DEBUG] After team filter (Royal Challengers Bengaluru): 63632 rows (removed 214573)
+[DEBUG] After player filter (RG Sharma): 664 rows (removed 62968)
+[DEBUG] After location filter: 664 rows (removed 0)
+
+❓ Query: Compare Kohli vs Rohit at Chinnaswamy
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'RCB'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "compare_players",
+      "args": {
+        "playerA": "Kohli",
+        "playerB": "Rohit",
+        "team": "RCB",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "role": "compare",
+        "query": "",
+        "period": "2019-01-01–2019-12-31",
+        "data": {
+          "comparison": {
+            "Kohli": {
+              "error": "player_not_found",
+              "hint": "Your query 'Kohli' is ambiguous. Did you mean: **Virat Kohli**, **Taruwar Kohli**?"
+            },
+            "Rohit Sharma": {
+              "runs": 848,
+              "avg": 28.27,
+              "sr": 138.11,
+              "wickets": 0,
+              "eco": 11.25,
+              "matches": 33
+            },
+            "info": "Data unavailable for one player; showing available stats for Rohit Sharma only."
+          },
+          "filters": {
+            "start": null,
+            "end": null,
+            "team": "Royal Challengers Bengaluru",
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] compare_players for Kohli"
+    }
+  ]
+}
+
+
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+[2025-11-11 23:52:19] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:52:19] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:52:20] [INFO   ] 🧠 Using memory (filtered): {'playerA': 'Kohli', 'playerB': 'Rohit', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[2025-11-11 23:52:20] [INFO   ] 🧠 Using memory: {'playerA': 'Kohli', 'playerB': 'Rohit', 'team': 'RCB', 'season': '2019', 'start': '2019-01-01', 'end': '2019-12-31', 'metric': 'runs', 'n': 1}
+[DEBUG] Auto-inferred season=2019 from start/end
+
+❓ Query: Predict Shubman Gill form at Narenda Modi
+----------------------------------------------------------------------
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "predict_performance",
+      "args": {
+        "player": "Shubman Gill",
+        "start": "2019-01-01",
+        "end": "2019-12-31"
+      },
+      "result": {
+        "status": "ok",
+        "player": "Shubman Gill",
+        "dataset_name": "Shubman Gill",
+        "period": "2019-01-01–2019-12-31",
+        "role": "predict",
+        "data": {
+          "player": "Shubman Gill",
+          "dataset_name": "unknown",
+          "batting_prediction": {
+            "predicted_runs_per_match": 33.94,
+            "inputs": {
+              "balls": 2867.0,
+              "dismissals": 98.0,
+              "fours": 372.0,
+              "sixes": 119.0,
+              "strike_rate": 134.8447854900593,
+              "avg": 39.44897959183673
+            },
+            "model": "RandomForestRegressor",
+            "trained_at": "2025-11-11T23:43:57.131103Z"
+          }
+        }
+      },
+      "thought": "[gemini] predict_performance for Shubman Gill"
+    }
+  ]
+}
+
+
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+[2025-11-11 23:52:37] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:52:37] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:52:39] [INFO   ] 🧠 Using memory (filtered): {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'season': '2019', 'metric': 'runs', 'n': 1}
+[2025-11-11 23:52:39] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'season': '2019', 'metric': 'runs', 'n': 1}
+[DEBUG] Auto-inferred season=2025 from start/end
+[DEBUG] get_team_stats called with team=Sunrisers Hyderabad, start=None, end=None, season=2025, venue=None, city=None
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 23.54it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.29it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.58it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.82it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 81.76it/s]
+[DEBUG] normalize_entity → Sunrisers Hyderabad
+[DEBUG] Team variants → ['Sunrisers Hyderabad']
+[DEBUG] Dataset loaded: 278205 rows, seasons=['2008', '2009', '2010'] ... ['2023', '2024', '2025']
+[DEBUG] apply_filters() called with season=2025, start=None, end=None, team=None, venue=None, city=None
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2025): 17285 rows
+[DEBUG] After location filter: 17285 rows (removed 0)
+[DEBUG] After apply_filters: 17285 rows (removed 260920)
+[DEBUG] After restricting to team variants: 3234 rows
+[DEBUG] Computed aggregates: matches=14, wins=6, win_ratio=42.86
+
+❓ Query: How did SRH do this year
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'SRH'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "SRH",
+        "season": "2025",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "team": "Sunrisers Hyderabad",
+          "matches": 14,
+          "total_runs": 2519,
+          "wickets_taken": 88,
+          "wins": 6,
+          "win_ratio": 42.86,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": "2025",
+            "venue": null,
+            "city": null
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for SRH"
+    }
+  ]
+}
+
+
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+[2025-11-11 23:52:57] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:52:57] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+[2025-11-11 23:52:59] [INFO   ] 🧠 Using memory (filtered): {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'season': '2025', 'start': '2025-01-01', 'end': '2025-11-11', 'metric': 'runs', 'n': 1}
+[2025-11-11 23:52:59] [INFO   ] 🧠 Using memory: {'player': 'Shubman Gill', 'playerA': 'Kohli', 'playerB': 'Rohit', 'season': '2025', 'start': '2025-01-01', 'end': '2025-11-11', 'metric': 'runs', 'n': 1}
+[DEBUG] Auto-inferred season=2025 from start/end
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 121.98it/s]
+[DEBUG] get_team_stats called with team=Kolkata Knight Riders, start=None, end=None, season=2025, venue=None, city=Kolkata
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches: 100%|██████████| 2/2 [00:00<00:00, 20.95it/s]
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  4.35it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  6.62it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 23.60it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 109.09it/s]
+[DEBUG] normalize_entity → Kolkata Knight Riders
+[DEBUG] Team variants → ['Kolkata Knight Riders']
+[DEBUG] Dataset loaded: 278205 rows, seasons=['2008', '2009', '2010'] ... ['2023', '2024', '2025']
+[DEBUG] apply_filters() called with season=2025, start=None, end=None, team=None, venue=None, city=Kolkata
+[DEBUG] Initial rows: 278205
+[DEBUG] After season filter (2025): 17285 rows
+[DEBUG] After location filter: 1590 rows (removed 15695)
+[DEBUG] After apply_filters: 1590 rows (removed 276615)
+[DEBUG] After restricting to team variants: 1590 rows
+[DEBUG] Computed aggregates: matches=7, wins=2, win_ratio=28.57
+
+❓ Query: Show KKR performance in Kolkata
+----------------------------------------------------------------------
+🧭 Resolved entities: {'team': 'KKR', 'city': 'Kolkata'}
+{
+  "status": "final",
+  "answer": "Tool executed",
+  "trace": [
+    {
+      "action": "get_team_stats",
+      "args": {
+        "team": "KKR",
+        "city": "Kolkata",
+        "season": "2025",
+        "start": "2025-01-01",
+        "end": "2025-11-11"
+      },
+      "result": {
+        "status": "ok",
+        "role": "team",
+        "query": "",
+        "period": "2025-01-01–2025-11-11",
+        "data": {
+          "team": "Kolkata Knight Riders",
+          "matches": 7,
+          "total_runs": 1159,
+          "wickets_taken": 39,
+          "wins": 2,
+          "win_ratio": 28.57,
+          "filters": {
+            "start": null,
+            "end": null,
+            "season": "2025",
+            "venue": null,
+            "city": "Kolkata"
+          }
+        }
+      },
+      "thought": "[gemini] get_team_stats for KKR"
+    }
+  ]
+}
+
+
+
+❓ Query: Who are best batsmen at M. A. Chidambaram Stadium
+----------------------------------------------------------------------
+[2025-11-11 23:53:18] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:53:18] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 41.732550162s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 41
+}
+]
+
+
+
+❓ Query: Compare Dhoni and Pant at Delhi in 2020
+----------------------------------------------------------------------
+[2025-11-11 23:53:34] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:53:34] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 25.031882717s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 25
+}
+]
+
+
+
+❓ Query: How did RCB perform at Chinnaswamy in 2018
+----------------------------------------------------------------------
+[2025-11-11 23:53:51] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:53:51] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 8.163063191s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 8
+}
+]
+
+
+
+❓ Query: Show Virat Kohli batting for RCB in 2016
+----------------------------------------------------------------------
+[2025-11-11 23:54:08] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:54:08] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 51.12570686s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 51
+}
+]
+
+
+
+❓ Query: Show RCB performance in Bengaluru
+----------------------------------------------------------------------
+[2025-11-11 23:54:25] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:54:25] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 34.016091588s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 34
+}
+]
+
+
+----------------------------------------------------------
+🌍 Testing fallback reasoning (non-IPL queries)
+
+❓ Query: How did Rohit Sharma perform in 2016 ODI World Cup
+----------------------------------------------------------------------
+[2025-11-11 23:54:42] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:54:42] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 17.156340611s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 17
+}
+]
+
+
+
+❓ Query: Who scored the most centuries in Asia Cup 2023
+----------------------------------------------------------------------
+[2025-11-11 23:55:00] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:55:00] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 59.63801704s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 59
+}
+]
+
+
+
+❓ Query: How many runs did Kohli make in T20 World Cup 2022
+----------------------------------------------------------------------
+[2025-11-11 23:55:18] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:55:18] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 41.726212359s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 41
+}
+]
+
+
+
+❓ Query: Top wicket takers in ICC World Cup 2019
+----------------------------------------------------------------------
+[2025-11-11 23:55:34] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:55:34] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 24.948817767s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 24
+}
+]
+
+
+
+❓ Query: Best batsmen in bilateral series against England
+----------------------------------------------------------------------
+[2025-11-11 23:55:51] [INFO   ] ✅ Using LLM provider=gemini, model=models/gemini-2.5-flash
+[2025-11-11 23:55:51] [INFO   ] 🔗 Using LLM backend (gemini, models/gemini-2.5-flash).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 825, in <module>
+    main_cli()
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 822, in main_cli
+    r = agent.run(q); print_clean_result(q, r)
+        ^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 638, in run
+    plan = self.planner.decide_tool(question, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/CricGPT/cricket_tools/agent.py", line 385, in decide_tool
+    response = model_obj.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 250
+Please retry in 8.101740163s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 250
+}
+, retry_delay {
+  seconds: 8
+}
+]
+
+

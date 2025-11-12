@@ -1,9 +1,15 @@
 {
-  "ts": 1762814047.6739616,
+  "ts": 1762951767.6197782,
   "context": {
-    "team": "MI",
-    "venue": "Chepuk",
-    "season": "Asia Cup 2023",
-    "metric": "runs"
+    "player": "Rohit Sharma",
+    "start": "2020-01-01",
+    "end": "2020-12-31",
+    "season": "2021",
+    "metric": "runs",
+    "playerA": "Virat Kohli",
+    "playerB": "Rohit Sharma",
+    "team": "Mumbai Indians",
+    "n": 5,
+    "venue": "Wankhede"
   }
 }

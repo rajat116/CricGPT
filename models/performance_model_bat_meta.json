@@ -1,5 +1,5 @@
 {
-  "created_at": "2025-11-06T17:45:03.832398Z",
+  "created_at": "2025-11-11T23:43:57.131103Z",
   "model_path": "models/performance_model_bat.pkl",
   "feature_cols": [
     "balls",
@@ -11,8 +11,8 @@
   ],
   "target_col": "runs_per_match",
   "metrics": {
-    "mse": 22.239993006509764,
-    "rmse": 4.715929707545455,
+    "mse": 22.239993,
+    "rmse": 4.716,
     "n_train": 528,
     "n_test": 176
   },

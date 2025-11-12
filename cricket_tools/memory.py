@@ -1,4 +1,4 @@
-# cricket_tools/memory.py  —  Step 7.3 final version
+# cricket_tools/memory.py — Step 7.3 final verified
 from __future__ import annotations
 import json, time
 from pathlib import Path
@@ -18,10 +18,12 @@ _CONTEXT_KEYS = [
     "metric", "n",
 ]
 
-def _now() -> float: return time.time()
+def _now() -> float:
+    return time.time()
 
 def _load_raw() -> Dict[str, Any]:
-    if not _CACHE_FILE.exists(): return {}
+    if not _CACHE_FILE.exists():
+        return {}
     try:
         return json.loads(_CACHE_FILE.read_text(encoding="utf-8"))
     except Exception:
@@ -58,7 +60,8 @@ def merge_with_memory(current: Dict[str, Any]) -> Dict[str, Any]:
     Combine new query args with previous memory.
     Memory fills missing keys; user args override.
     """
-    mem = get_memory().get("context", {})
+    mem_state = get_memory()
+    mem = mem_state.get("context", {}) if not _expired(mem_state.get("ts")) else {}
     merged = {**mem, **{k: v for k, v in current.items() if v not in (None, "", [])}}
     return {k: merged[k] for k in _CONTEXT_KEYS if merged.get(k) not in (None, "", [])}
 
@@ -76,4 +79,4 @@ def update_memory(resolved: Dict[str, Any]) -> None:
 
 def clear_memory() -> None:
     """Erase all memory (used for --clear-memory or tests)."""
-    _save_raw(_empty_state())
+    _save_raw({"ts": 0, "context": {}})
