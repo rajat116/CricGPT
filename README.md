@@ -702,6 +702,247 @@ Let me know when you finish pushing changes, then we begin **Phase-2**.
 
 ---
 
+Here is the **clean, complete, correct README for Phase-2**, fully consistent with your project, your architecture, and everything we implemented.
+
+---
+
+# 🚀 **Phase-2 — Unified Backend Layer (`run_query`)**
+
+Phase-2 introduces a **single universal backend function** for CricGPT that allows:
+
+* CLI
+* FastAPI
+* Streamlit UI
+* Jupyter notebooks
+* Unit tests
+* External integrations
+
+to all use **the same orchestration pipeline**.
+
+This is the step that turns your project from *"CLI-only tool"* into a proper **API-driven system** ready for deployment.
+
+---
+
+# 🎯 **Goal of Phase-2**
+
+Until Phase-1, natural language formatting was done inside **agent.py** only in CLI mode using `--nl`.
+
+CLI workflow looked like this:
+
+```
+User Query → Planner → Tool → Structured Output → LLM Formatter → Print
+```
+
+But:
+
+* There was **no API function** to call CricGPT directly.
+* Plot generation logic lived inside CLI.
+* Memory merging happened only inside agent.
+* Each environment (CLI, UI, API) would have required custom logic.
+* Hard to embed CricGPT into a website or app.
+
+**Phase-2 fixes all this.**
+
+---
+
+# 💡 What Phase-2 Adds
+
+A new file:
+
+```
+cricket_tools/runner.py
+```
+
+with one main function:
+
+```python
+run_query(
+    message: str,
+    backend="llm_reasoning",
+    plot=False,
+    fallback=True,
+    session_id=None
+)
+```
+
+This function becomes the **single entry point** for the entire CricGPT system.
+
+---
+
+# 🧩 **What `run_query()` Does**
+
+It performs *all* orchestration steps in one place:
+
+### 1️⃣ Create a `CricketAgent`
+
+Configures backend and fallback settings.
+
+### 2️⃣ Execute the planning + tool pipeline
+
+Same logic that CLI used internally.
+
+### 3️⃣ Apply natural-language formatter
+
+Uses the universal `llm_formatter.py` to generate smooth, non-hallucinating prose.
+
+### 4️⃣ Generate optional plots
+
+Automatically selects correct plotting function.
+
+### 5️⃣ Manage session ID + memory
+
+Returns a stable session token (UUID) if not provided.
+
+### 6️⃣ Returns a **clean, predictable JSON** object:
+
+```json
+{
+  "reply": "... natural language output ...",
+  "act": "get_batter_stats",
+  "result": { ... structured IPL data ... },
+  "plot_path": "outputs/plots/xxxx.png",
+  "meta": {},
+  "trace": [...],
+  "session_id": "...."
+}
+```
+
+This becomes the base interface for:
+
+* CLI
+* FastAPI API
+* Streamlit chat UI
+* Tests
+* Notebooks
+* Later: mobile app or Electron app
+
+---
+
+# 🧱 **File Added in this Phase**
+
+### ✔️ `cricket_tools/runner.py`
+
+Contains the unified orchestrator.
+
+### ✔️ Small update in `agent.py`
+
+When CLI is called with `--nl`, instead of using the internal formatter, it now calls:
+
+```python
+resp = run_query(...)
+```
+
+This activates the unified backend.
+
+---
+
+# 🧪 How to Test Phase-2
+
+### **1. Natural-language mode via CLI uses the unified backend**
+
+```bash
+python -m cricket_tools.agent "rohit sharma 2020" --nl
+```
+
+Expected:
+
+* Uses reasoning planner
+* Executes structured tool
+* Applies natural language formatter
+* (If plot auto: generates visuals)
+
+### **2. Test plot generation via unified backend**
+
+```bash
+python -m cricket_tools.agent "win probability mi vs csk 2020" --nl --plot auto
+```
+
+Expected:
+
+* JSON pipeline + visual generation
+* Natural language output describing win-probability curve
+* File saved under `outputs/`
+
+### **3. Test ambiguous names**
+
+```bash
+python -m cricket_tools.agent "stats for rahul" --nl
+```
+
+Expected:
+
+* Ambiguous → uses llm_formatter → friendly clarification
+
+### **4. Directly test `runner.py` from Python**
+
+```python
+from cricket_tools.runner import run_query
+
+resp = run_query("show kohli vs rohit", backend="llm_reasoning", plot=True)
+print(resp["reply"])
+```
+
+---
+
+# 🏆 Outcome of Phase-2
+
+### ✔️ CricGPT now has a **professionally designed backend**
+
+Everything—CLI/UI/API—will use **one** function.
+
+### ✔️ Natural-language answers come from a single module
+
+(Phase-1 formatter).
+
+### ✔️ Ready for Phase-3 (FastAPI)
+
+The API will be unbelievably simple:
+
+```python
+@app.post("/ask")
+def ask(q: str):
+    return run_query(q, backend="llm_reasoning", plot=False)
+```
+
+### ✔️ Ready for Phase-4 (Streamlit Chat UI)
+
+The chat UI will call only `run_query`.
+
+### ✔️ Consistent output everywhere
+
+Every client gets structured + natural output + plot path.
+
+---
+
+# 🔮 What’s Next?
+
+Here is the official sequence:
+
+### **Phase-3 — FastAPI Inference Server**
+
+Serve CricGPT via `/ask` endpoints.
+
+### **Phase-4 — Streamlit Web UI**
+
+Interactive CricGPT chatbot interface.
+
+### **Phase-5 (Optional) — Vector Search Engine**
+
+Embedding-based semantic search for richer queries.
+
+---
+
+# ✔️ Phase-2 is 100% Complete
+
+You have:
+
+* `runner.py`
+* `agent.py` modifications
+* Full unified backend
+* Verified with `--nl` and normal CLI queries
+
+---
+
 **🧩 Test Everything So Far**
 
 ```bash

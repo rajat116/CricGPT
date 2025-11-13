@@ -1071,23 +1071,23 @@ def main_cli():
 
     r = agent.run(q)
 
-    # -----------------------------------------------
-    # Natural-language output mode (improved)
-    # -----------------------------------------------
+    # -----------------------------------------------------------
+    # PHASE-2 Unified Natural-Language Output via run_query()
+    # -----------------------------------------------------------
     if args.nl:
-        from .llm_formatter import format_natural_answer
-        ans = format_natural_answer(q, r)
-        print("\n" + ans + "\n")
-        return
+        from cricket_tools.runner import run_query
 
-        # 2. Handle final structured answer with LLM formatting
-        ans = r.get("answer")
-        if ans:
-            print("\n" + ans + "\n")
-            return
+        resp = run_query(
+            q,
+            backend=args.backend,
+            plot=(args.plot == "auto"),
+            fallback=args.fallback,
+            session_id=None,
+        )
 
-        # 3. Otherwise fallback
-        print("\n(No natural-language answer.)\n")
+        print("\n" + resp["reply"] + "\n")
+        if resp.get("plot_path"):
+            print(f"📊 Plot saved at: {resp['plot_path']}")
         return
 
     # -----------------------------------------------
