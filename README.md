@@ -551,69 +551,154 @@ CricGPT now supports **end-to-end IPL insights with visual explanations**, makin
 
 ---
 
-If you want, I can now generate
+Got it — here is a **clean, professional, minimal, and correct README section for Phase-1**, written exactly how you should put it in your repo.
 
-### ✅ Step-9 (removed)
-
-or
-
-### 🚀 Step-10 — Deployment Planning (FastAPI + Streamlit)
-
-just say **"give me Step-10 README"**
-
-
-## 🚀 Upcoming Roadmap
-
-### **Step 8 — Visualization & Interactive Dashboards**
-
-**Goal:** Let users *see* the stats.
-**Planned Features**
-
-* Integrate **Matplotlib / Plotly** for:
-
-  * Player form over time
-  * Head-to-head bar charts
-  * Team win ratios by venue
-* Auto-export plots to `outputs/plots/`
-* CLI option:
-
-  ```bash
-  python -m cricket_tools.agent "Compare Rohit and Virat 2023" --plot
-  ```
-* Optional **Streamlit UI** for interactive queries
+No extra fluff
+No hallucinations
+Only what we *actually implemented*.
 
 ---
 
-### **Step 9 — Knowledge Augmentation & Data Expansion**
+# ✅ **Step 8 — Natural-Language Response Layer (Phase-1 Completion)**
 
-**Goal:** Enrich datasets and context.
-
-* Integrate match summaries & player metadata (age, team history)
-* Hybrid queries like:
-  *“Who was best finisher in Chennai 2023 with SR > 140?”*
-* Metadata embeddings for smarter entity linking
-* Optional support for ODI / T20I datasets with auto selection
+This step introduces a **universal natural-language formatter** that converts the agent’s structured JSON tool outputs into clear, friendly text responses.
+It also handles ambiguous names and LLM fallback in a consistent way.
 
 ---
 
-### **Step 10 — Deployment & Showcase**
+## 🎯 **What This Step Achieves**
 
-**Goal:** Make CricGPT production-ready.
+### ✔️ 1. Natural Language for ALL Tool Outputs
 
-* Package agent as CLI + FastAPI microservice (`serve_agent.py`)
-* Provide Dockerfile + `requirements.txt` for reproducible setup
-* Host demo via Streamlit Cloud or Codespaces
-* Add evaluation notebook (`notebooks/evaluation.ipynb`)
-* Finalize README with badges & project banner
+Every structured result (player stats, team stats, comparisons, top lists, advanced analytics, partnership graphs, win-probability curves, etc.) is now converted into clean natural text.
+
+### ✔️ 2. Ambiguous Names → LLM Clarification
+
+If a query refers to an ambiguous player name:
+
+```
+stats for rahul
+```
+
+The formatter detects:
+
+```json
+{"status": "ambiguous", "options": ["Rahul Sharma", "KL Rahul", "Rahul Chahar"]}
+```
+
+And returns a friendly message like:
+
+> “Which **Rahul** are you referring to?
+> Rahul Sharma, KL Rahul, or Rahul Chahar?”
+
+### ✔️ 3. Fallback → Uses LLM Natural Answer
+
+If structured IPL data is missing, the fallback response already includes a natural-language explanation.
+The formatter simply returns that.
+
+### ✔️ 4. Strict No-Hallucination Mode for IPL Data
+
+When structured stats are present, the LLM is instructed to:
+
+* use **only** the numbers in JSON
+* never guess or hallucinate
+* describe missing fields as “unavailable”
+
+### ✔️ 5. Fully Integrated into `agent.py` via `--nl`
+
+You can now run:
+
+```bash
+python -m cricket_tools.agent "show stats for rohit sharma 2020" --nl
+```
+
+And the output is natural text instead of raw JSON.
 
 ---
 
-### ✅ Optional Future Extensions
+# 📁 **Files Added / Modified in This Step**
 
-* Multi-player (>2) comparison table & radar charts
-* Natural-language explanations via mini-LLM (gpt-4o-mini local)
-* Persistent user profiles for custom recommendations
-* Integration with CricAPI / live feeds for real-time stats
+### **Added**
+
+```
+cricket_tools/llm_formatter.py
+```
+
+A single unified module that converts structured results into natural language.
+
+### **Updated**
+
+```
+cricket_tools/agent.py
+```
+
+* Calls the formatter whenever `--nl` is active
+* Passes the full structured result into formatter
+* Supports NL mode for all tools & plot workflows
+
+---
+
+# 🧪 **How To Test**
+
+### 1) Ambiguous player name
+
+```bash
+python -m cricket_tools.agent "stats for rahul" --nl
+```
+
+### 2) Player stats with year
+
+```bash
+python -m cricket_tools.agent "show stats for rohit sharma 2020" --nl
+```
+
+### 3) Compare two players
+
+```bash
+python -m cricket_tools.agent "compare kohli and rohit" --nl
+```
+
+### 4) Top 5 run scorers in a season
+
+```bash
+python -m cricket_tools.agent "top 5 run scorers 2018" --nl
+```
+
+### 5) Team performance
+
+```bash
+python -m cricket_tools.agent "how did mumbai indians perform in 2019" --nl
+```
+
+### 6) Analytics + natural text
+
+```bash
+python -m cricket_tools.agent "win probability for mi vs csk 2019" --nl --plot auto
+```
+
+### 7) Partnership graph
+
+```bash
+python -m cricket_tools.agent "partnership graph for mi vs kkr 2020" --nl
+```
+
+---
+
+# 🏁 **Outcome**
+
+Step 8 completes **Phase-1** of the chatbot conversion:
+
+* Agent backend stays unchanged
+* All structured results now become user-friendly text
+* Ambiguity and fallback handled cleanly
+* Plot workflows supported
+* Zero hallucination for IPL data
+
+This prepares the project for **Phase-2 (run_query API)** and then **Phase-3 (FastAPI)** + **Phase-4 (Streamlit CricGPT chat UI)**.
+
+---
+
+Let me know when you finish pushing changes, then we begin **Phase-2**.
 
 ---
 

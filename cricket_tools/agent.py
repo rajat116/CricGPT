@@ -884,6 +884,15 @@ class CricketAgent:
         # --- STEP-7 Update memory after successful tool run ---
         update_memory(clean_args)
 
+        # --- 🔍 STOP EARLY IF RESULT IS AMBIGUOUS ---
+        if isinstance(result, dict) and result.get("status") == "ambiguous":
+            return {
+                "status": "ambiguous",
+                "options": result.get("options", []),
+                "hint": result.get("hint", ""),
+                "query": clean_args.get("player")
+            }
+
         # --- 🧠 Fallback: if tool failed or returned no data ---
         #use_fallback = getattr(self, "fallback_enabled", False) or \
         #               os.getenv("ENABLE_LLM_FALLBACK", "false").lower() == "true"
@@ -971,7 +980,26 @@ class CricketAgent:
                 }
                 return final_response
 
-        return {"status": "final", "answer": "Tool executed", "trace": trace}
+        # --------------------------------------------------------
+        # Unified final result for formatter
+        # --------------------------------------------------------
+        final_res = {
+            "status": "final",
+            "action": act,
+            "args": clean_args,
+            "data": result,
+            "trace": trace,
+        }
+
+        # Natural-language mode
+        if getattr(self, "natural_language", False):
+            from .llm_formatter import format_natural_answer
+            final_res["answer"] = format_natural_answer(question, final_res)
+            return final_res
+
+        # Default JSON mode
+        return final_res
+
 
 def print_clean_result(q, res):
     print(f"\n❓ Query: {q}\n" + "-"*70)
@@ -997,6 +1025,8 @@ def main_cli():
                    help="Player(s) for plotting (one for form; two for h2h)")
     p.add_argument("--team",
                    help="Team name (required for venue-ratio plots)")
+    p.add_argument("--nl", action="store_true",
+                   help="Return natural-language answer instead of JSON")
 
     args = p.parse_args()
     q = " ".join(args.question).strip()
@@ -1004,6 +1034,7 @@ def main_cli():
     if args.plot:
         print("🎨 Generating visualization through LLM agent…")
         agent = CricketAgent(args.backend, args.model, args.semantic_model)
+        agent.natural_language = args.nl
         # ✅ Always allow fallback during plotting so we can visualize even when IPL data is missing
         agent.fallback_enabled = True
         # Step 1: Run LLM/semantic pipeline to get structured result
@@ -1037,7 +1068,32 @@ def main_cli():
     if args.clear_memory:
         clear_memory()
         print("🧹 Cleared session memory.")
-    r = agent.run(q); print_clean_result(q, r)
+
+    r = agent.run(q)
+
+    # -----------------------------------------------
+    # Natural-language output mode (improved)
+    # -----------------------------------------------
+    if args.nl:
+        from .llm_formatter import format_natural_answer
+        ans = format_natural_answer(q, r)
+        print("\n" + ans + "\n")
+        return
+
+        # 2. Handle final structured answer with LLM formatting
+        ans = r.get("answer")
+        if ans:
+            print("\n" + ans + "\n")
+            return
+
+        # 3. Otherwise fallback
+        print("\n(No natural-language answer.)\n")
+        return
+
+    # -----------------------------------------------
+    # Default JSON output
+    # -----------------------------------------------
+    print_clean_result(q, r)
 
 if __name__ == "__main__":
     main_cli()
