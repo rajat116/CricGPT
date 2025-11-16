@@ -334,3 +334,20 @@ This separation makes it easy to:
 * Add more advanced derived metrics (clutch index, consistency score, intent vs execution, etc.)
 * FastAPI backend for production-grade API deployment
 * More tests & benchmarks against other cricket agents / pure LLM baselines
+
+## 📊 Data Source
+
+OverPrompt uses ball-by-ball IPL data made available by **[Cricsheet](https://cricsheet.org/)**.
+
+> This project uses data from Cricsheet.  
+> Data © Cricsheet, licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+
+## 📜 License
+
+- **Code**: MIT License (see `LICENSE` file in this repository).  
+- **Data**: IPL match data is © Cricsheet and is provided under the  
+  [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) license.
+
+---
+
+© 2025 Rajat Gupta · OverPrompt — IPL Analytics & LLM Assistant
