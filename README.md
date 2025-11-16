@@ -283,26 +283,37 @@ This separation makes it easy to:
 
 ## 🧰 Tech Stack & Tools
 
-**Languages & Core Libraries**
+### Core Data & Analytics
 
-* Python (3.x)
-* `pandas`, `pyarrow` / `fastparquet` for data handling
-* `numpy` for numerics
-* `rapidfuzz`, `jellyfish` for fuzzy + phonetic matching
-* `sentence-transformers` for semantic similarity
-* `scikit-learn` (optional ML models, e.g. RandomForestRegressor)
-* `matplotlib` for plotting
-* `streamlit` for the web UI
+- **Python 3.x**
+- **Pandas**, **NumPy** – feature engineering, aggregations, match/over/ball-level stats
+- **PyArrow / Parquet** – columnar IPL dataset (`ipl_deliveries.parquet`)
+- **Matplotlib** – momentum worms, phase-dominance, H2H, partnership, pressure & win-probability plots
 
-**LLM / Reasoning Layer**
+### Entity Resolution & Semantics
 
-* OpenAI / Gemini / Ollama (configurable through environment / settings)
-* Optional semantic / mock backends for offline or key-less use
+- **rapidfuzz** – fuzzy string matching for noisy player/team/venue names
+- **jellyfish** – DMetaphone-based phonetic matching
+- **sentence-transformers** – semantic embeddings for hybrid name/entity resolution
 
-**Infra & deployment**
+### LLM & Reasoning Layer
 
-* Streamlit Community Cloud for the live demo: [https://overprompt.streamlit.app/](https://overprompt.streamlit.app/)
-* Local development via virtualenv / Codespaces / VS Code (your usual setup)
+- **OpenAI / Gemini / Ollama** – pluggable LLM backends (configured via `LLM_PROVIDER` + API keys)
+- **Custom reasoning agent** (`cricket_tools.agent`) that:
+  - Parses natural-language questions
+  - Detects intent (player stats, team stats, H2H, analytics, top-N, etc.)
+  - Calls the right **structured IPL tools** (no hallucinated numbers)
+- **LLM formatter** (`llm_formatter`) that:
+  - Takes **JSON stats** and returns controlled natural-language explanations
+  - Enforces “no guessing / no hallucinations” for IPL data
+- **Fallback LLM layer** for out-of-scope questions (non-IPL / missing data), clearly separated from structured answers
+
+### App & Infra
+
+- **Streamlit** – public web app UI: https://overprompt.streamlit.app/
+- **(Optional) FastAPI / `runner.py`** – unified backend entrypoint (`run_query(...)`) ready for API deployment
+- **dotenv / TOML config** – provider selection, model selection, and feature flags
+- **GitHub + Codespaces / local venv** – development & deployment workflow
 
 ---
 
