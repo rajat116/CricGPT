@@ -11,6 +11,7 @@ jellyfish
 metaphone
 sentence-transformers
 xgboost
+streamlit
 
 # Agentic / LLM (added later)
 openai

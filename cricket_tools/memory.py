@@ -80,3 +80,16 @@ def update_memory(resolved: Dict[str, Any]) -> None:
 def clear_memory() -> None:
     """Erase all memory (used for --clear-memory or tests)."""
     _save_raw({"ts": 0, "context": {}})
+
+# --------------------------------------------------------
+# Pending Resolution (Option-3)
+# --------------------------------------------------------
+def get_pending() -> Dict[str, Any] | None:
+    raw = _load_raw()
+    pend = raw.get("pending")
+    return pend
+
+def save_pending(pending: Dict[str, Any] | None):
+    raw = _load_raw()
+    raw["pending"] = pending
+    _save_raw(raw)

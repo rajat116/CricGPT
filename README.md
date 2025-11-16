@@ -943,6 +943,315 @@ You have:
 
 ---
 
+# 🚀 Phase-3 — FastAPI Production API Layer
+
+Phase-3 exposes the entire CricGPT engine (Phase-2 `run_query()`) as a clean, stable, production-ready **FastAPI server**.
+
+This allows:
+
+* Web UI / Streamlit frontends
+* Integration with external apps
+* Mobile clients
+* CI/CD + deployment
+* Test automation
+
+All agent logic remains inside `cricket_tools/`.
+FastAPI only orchestrates requests through a single API endpoint.
+
+---
+
+## 📁 Project Structure (Phase-3)
+
+```
+app/
+   ├── main.py              # FastAPI app entrypoint
+   ├── routers/
+   │      └── query.py      # /query endpoint
+   ├── schemas/
+   │      └── query.py      # Pydantic request+response models
+   └── __init__.py
+
+cricket_tools/
+   └── runner.py            # Phase-2 unified backend
+```
+
+---
+
+## 📌 `/query` Endpoint
+
+**POST /query**
+
+### Request Body
+
+```json
+{
+  "query": "rohit sharma 2020",
+  "backend": "llm_reasoning",
+  "plot": false,
+  "fallback": true,
+  "session_id": null
+}
+```
+
+### Response
+
+Returns a unified dictionary from `run_query()`:
+
+```json
+{
+  "reply": "...natural language answer...",
+  "act": "get_batter_stats",
+  "result": {...structured stats...},
+  "plot_path": null,
+  "trace": [...],
+  "session_id": "uuid"
+}
+```
+
+---
+
+## ▶️ Running the API
+
+From the project root:
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Open:
+
+* Swagger UI → [http://localhost:8000/docs](http://localhost:8000/docs)
+* ReDoc → [http://localhost:8000/redoc](http://localhost:8000/redoc)
+* Health check → [http://localhost:8000/health](http://localhost:8000/health)
+
+---
+
+## 🧪 Quick Test (curl)
+
+```bash
+curl -X POST http://localhost:8000/query \
+     -H "Content-Type: application/json" \
+     -d '{"query": "rohit sharma 2020"}'
+```
+
+---
+
+## 🧪 Quick Test (Python)
+
+```python
+import requests
+r = requests.post("http://localhost:8000/query", json={"query": "rohit sharma 2020"})
+print(r.json())
+```
+
+---
+
+## 🎯 Summary
+
+Phase-3 adds a **stable API layer** on top of your unified agent backend:
+
+✔ No duplication
+✔ Same logic as CLI
+✔ Natural-language included
+✔ Plotting supported (plot: true)
+✔ Ready for deployment and dockerization
+
+---
+
+# 🎉 Phase-3 complete
+
+## Phase 4 — Streamlit Chat UI & Dashboard
+
+In Phase 4 we wrapped the core **CricGPT agent** in a simple, interactive **Streamlit web app** so you can chat with the system, see structured answers, and optionally auto-generate plots without touching the CLI.
+
+---
+
+### 🎯 Objectives
+
+- Provide a **single-page web UI** for CricGPT.
+- Support **free-text chat** with the same reasoning pipeline as the CLI.
+- Display **natural-language answers** and structured traces.
+- Allow **optional auto-plotting** (momentum, H2H, partnerships, pressure, etc.).
+- Keep everything **stateless per request** except for a lightweight chat history.
+
+---
+
+### 📂 Key Files
+
+- `streamlit_app.py`  
+  Main Streamlit entry point. Handles:
+  - Text input box + “Send” button.
+  - Display of model reply (natural language).
+  - Optional display of plot path / embedded image.
+  - Sidebar controls for backend & plotting.
+
+- `cricket_tools/runner.py`  
+  High-level entry (`run_query(...)`) used by both CLI and Streamlit:
+  - Routes user message to `CricketAgent`.
+  - Enables **natural-language mode** (`agent.natural_language = True`).
+  - Optionally requests **auto-plotting**.
+  - Returns a unified response dict for the UI:
+    - `reply`: natural-language answer  
+    - `plot_path`: optional plot file path  
+    - `raw`: raw agent result (for debugging, if needed)
+
+---
+
+### 🧱 What Phase 4 Adds
+
+1. **Chat-style interface**
+   - Single text input box for the user’s query.
+   - Press `Enter` or click **Send** to submit.
+   - Response appears as formatted markdown (player stats, comparisons, explanations).
+
+2. **Auto-Generate Plots toggle**
+   - Sidebar checkbox: **“Auto-generate plots (when available)”**.
+   - When enabled:
+     - `run_query(..., plot=True)` is called.
+     - Analytics tools (H2H, momentum, phase dominance, threat map, partnership, pressure, win-prob) can produce plots.
+   - When disabled:
+     - Only natural-language + structured answer, no plotting overhead.
+
+3. **Backend & model selection (optional)**
+   - Sidebar drop-down for backend:
+     - e.g. `auto`, `llm_reasoning`, `semantic`, etc. (depending on your config).
+   - Uses the same logic as CLI to resolve the planner:
+     - If `LLM_PROVIDER` is set → LLM/Reasoning backend.
+     - Else → semantic or mock fallback.
+
+4. **Session-level chat history**
+   - Recent user queries and assistant answers are stored in `st.session_state`.
+   - Displayed as alternating “User” and “CricGPT” blocks.
+   - **Clear history** button in sidebar to reset the current session’s conversation.
+
+5. **Debug / trace visibility (optional)**
+   - For development, we can show:
+     - Chosen tool (e.g. `get_batter_stats`, `team_head_to_head`, `pressure_series`).
+     - Parsed arguments (player, team, season, etc.).
+     - Any fallback usage.
+   - Usually hidden from normal users; can be toggled via a sidebar debug checkbox.
+
+---
+
+### ▶️ How to Run
+
+From the project root (with your virtualenv activated):
+
+```bash
+# 1. Activate venv (example)
+source .venv/bin/activate
+
+# 2. Run Streamlit on 0.0.0.0:8501
+streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+````
+
+Then open the URL shown in the terminal (e.g. `http://localhost:8501` or the forwarded port in Codespaces) in your browser.
+
+> Make sure your `.env` / `LLM_PROVIDER` / model keys are configured as in previous phases.
+
+---
+
+### 💬 Usage Workflow in the UI
+
+1. **Open app** → see a central chat area and a sidebar.
+
+2. In the **sidebar**:
+
+   * Choose **backend** (e.g. `llm_reasoning`).
+   * Tick/untick **“Auto-generate plots (when available)”**.
+   * (Optional) Clear chat history.
+
+3. Type a query in the **chat box** and hit **Send**.
+
+4. The app internally calls:
+
+   ```python
+   from cricket_tools.runner import run_query
+
+   resp = run_query(
+       user_message,
+       backend=<selected_backend>,
+       plot=<auto_plot_checkbox>,
+       fallback=True,
+       session_id=None,
+   )
+   ```
+
+5. The UI renders:
+
+   * `resp["reply"]` as markdown.
+   * If `resp["plot_path"]` is present and auto-plot is enabled:
+
+     * The plot is shown (or at least the file path / image).
+
+---
+
+### 🧪 Example Queries to Try in Streamlit
+
+You can test all logic implemented so far directly in the UI:
+
+#### Basic player stats
+
+* `stats for Rohit`
+* `batting stats for Virat Kohli in 2016`
+* `bowling stats for Bumrah`
+* `form of Gill in recent years`
+
+#### Ambiguous name resolution
+
+* `stats for pandya`
+  → You should get a clarification asking **which Pandya**.
+  → Reply with `Hardik Pandya` → tool runs with resolved player.
+
+#### Comparisons
+
+* `compare Rohit Sharma and Virat Kohli in 2019`
+* `Kohli vs Rohit head to head batting in 2016`
+
+#### Team queries
+
+* `How did CSK perform in 2018?`
+* `MI performance at Wankhede`
+* `top 5 run scorers in 2013`
+* `top 10 wicket takers in 2019`
+
+#### Analytics tools (with Auto-plot ON / OFF)
+
+* `CSK vs MI head to head`
+* `momentum worm for CSK vs MI`
+* `phase dominance for CSK vs MI in 2019`
+* `threat map for Mumbai Indians`
+* `partnership graph for CSK vs MI 2019`
+* `pressure curve for CSK vs MI`
+* `win probability series for CSK vs MI final 2019`
+
+When **Auto-generate plots** is ON:
+
+* You get both:
+
+  * Natural-language summary (via `llm_formatter` Phase-3B).
+  * Corresponding plot (momentum, phase, H2H, etc.), where implemented.
+
+When OFF:
+
+* You only see the **textual explanation**, which is still understandable.
+
+---
+
+### ℹ Notes & Limitations
+
+* The app is intended as a **developer / analyst UI**, not yet a polished public product.
+* Plot generation depends on:
+
+  * Data availability for that match/season.
+  * Corresponding functions implemented in `cricket_tools.analytics` and `cricket_tools.visuals`.
+* For **non-IPL queries** (World Cup, bilateral series, etc.):
+
+  * The reasoning planner routes to `llm_fallback`.
+  * Streamlit UI still shows a **natural-language answer**, but not IPL stats.
+
+---
+
 **🧩 Test Everything So Far**
 
 ```bash

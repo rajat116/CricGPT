@@ -1,11 +1,9 @@
 {
-  "ts": 1763028586.494985,
+  "ts": 1763227299.7724628,
   "context": {
-    "player": "rahul",
-    "start": "2020-01-01",
-    "end": "2020-12-31",
-    "playerA": "kohli",
-    "playerB": "rohit",
+    "player": "Rohit Sharma",
+    "start": "2019-01-01",
+    "end": "2019-12-31",
     "season": "2019"
   }
 }

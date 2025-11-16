@@ -790,6 +790,63 @@ class CricketAgent:
     def run(self, question, max_iter=3):
         import inspect
         trace = []
+
+        # -------------------------------------------------
+        # 🔁 Pending resolution follow-up
+        # -------------------------------------------------
+        from .memory import get_pending, save_pending
+        pend = get_pending()
+
+        if pend:
+            # user reply like "Virat Kohli"
+            candidate = question.strip()
+
+            from .smart_names import resolve_player_smart
+            ds, canon, status, hint = resolve_player_smart(candidate)
+
+            if status == "ok" or status == "confirm":
+                # fill missing argument
+                pend["known_args"][pend["missing_arg"]] = canon
+
+                tool = pend["tool"]
+                args = pend["known_args"]
+
+                # -------------------------------------------------
+                # ⭐ PATCH-4 — Check if user follow-up includes year
+                # -------------------------------------------------
+                # ⭐ FIXED PATCH-4 — only set season when year was truly detected
+                s2, e2 = interpret_time_range(question)
+                if s2:
+                    args["start"] = s2
+                    args["end"] = e2
+                    year = str(s2)[:4]
+                    if year.isdigit():      # ← ensures valid year
+                        args["season"] = year
+                # ❌ else: do NOT set season at all
+
+                # clear pending state
+                save_pending(None)
+
+                # run tool immediately
+                tool_fn = TOOL_REGISTRY.get(tool)
+                if tool_fn:
+                    res = tool_fn(**args)
+                    trace.append({
+                        "action": tool,
+                        "args": args,
+                        "result": res,
+                        "thought": "Resolved via pending follow-up"
+                    })
+                    return {
+                        "status": "final",
+                        "action": tool,
+                        "args": args,
+                        "data": res,
+                        "trace": trace
+                    }
+
+        # if still ambiguous → fall through to normal pipeline
+
         # --- STEP-7 Memory merge before planning ---
         # We don’t yet know entities, but after planner we can merge remembered context.
         plan = self.planner.decide_tool(question, trace)
@@ -863,9 +920,26 @@ class CricketAgent:
             return {"status": "error", "message": f"Unknown action {act}", "trace": trace}
 
         args = plan.get("args", {}) or {}
+
+        # --- 🩹 FIX: remove stray single-player key when comparing two players ---
+        if act == "compare_players":
+            args.pop("player", None)
+
         # 🩹 carry over season if auto-inferred earlier
         if "season" not in args and plan.get("args", {}).get("season"):
             args["season"] = plan["args"]["season"]
+
+        # --- 🩹 FIX: fully sanitize args for compare_players ---
+        if act == "compare_players":
+
+            # absolutely forbidden keys for compare tool
+            bad_keys = [
+                "player", "team", "teamA", "teamB",
+                "venue", "city", "season", "metric", "topic", "n"
+            ]
+
+            for bad in bad_keys:
+                args.pop(bad, None)
         valid_params = inspect.signature(tool).parameters
         clean_args = {k: v for k, v in args.items() if k in valid_params}
 
@@ -884,14 +958,69 @@ class CricketAgent:
         # --- STEP-7 Update memory after successful tool run ---
         update_memory(clean_args)
 
-        # --- 🔍 STOP EARLY IF RESULT IS AMBIGUOUS ---
+        # -------------------------------------------------
+        # 🔍 AMBIGUOUS — start pending resolution mode
+        # -------------------------------------------------
+        ambiguous = False
+        missing = None
+
+        # Case 1 — Standard format
         if isinstance(result, dict) and result.get("status") == "ambiguous":
+            ambiguous = True
+            # --- FIX: single-player ambiguous ---
+            ambiguous_options = result.get("options", [])
+            missing = "player"
+
+        # Case 2 — Compare tool detected one player's ambiguity
+        elif act == "compare_players":
+            comp = (
+                result.get("data", {})
+                    .get("comparison", {})
+                if isinstance(result, dict)
+                else {}
+            )
+
+            ambiguous = False
+            missing = None
+            ambiguous_options = []
+
+            # find which player failed
+            for key, val in comp.items():
+                if isinstance(val, dict) and val.get("error") == "player_not_found":
+                    ambiguous = True
+
+                    # correctly map which argument failed
+                    if key.lower() == (args.get("playerA") or "").lower():
+                        missing = "playerA"
+                    elif key.lower() == (args.get("playerB") or "").lower():
+                        missing = "playerB"
+                    else:
+                        # safe fallback
+                        missing = "playerA"
+
+                    ambiguous_options = val.get("hint", [])
+                    break
+
+            # if ambiguous but missing still None → do not enter pending mode
+            if ambiguous and not missing:
+                ambiguous = False
+
+        if ambiguous:
+            from .memory import save_pending
+            known = {k: v for k, v in args.items() if k != missing}
+            save_pending({
+                "tool": act,
+                "missing_arg": missing,
+                "known_args": known
+            })
+
             return {
                 "status": "ambiguous",
-                "options": result.get("options", []),
-                "hint": result.get("hint", ""),
-                "query": clean_args.get("player")
+                "options": ambiguous_options,
+                "hint": "Player was ambiguous.",
+                "query": args.get(missing)
             }
+
 
         # --- 🧠 Fallback: if tool failed or returned no data ---
         #use_fallback = getattr(self, "fallback_enabled", False) or \

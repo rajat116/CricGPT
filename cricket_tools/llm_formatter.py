@@ -103,6 +103,85 @@ Write the message:
         return result.get("answer") or "(No fallback answer available.)"
 
     # --------------------------------------------------------
+    # NLP summaries for raw analytics tools
+    # --------------------------------------------------------
+
+    def _nl_h2h(res):
+        a = res.get("teamA", "Team A")
+        b = res.get("teamB", "Team B")
+        rec = res.get("records", {})
+
+        m = rec.get("matches", "unavailable")
+        wA = rec.get("winsA", "unavailable")
+        wB = rec.get("winsB", "unavailable")
+
+        return (
+            f"Head-to-head between **{a}** and **{b}**:\n"
+            f"- Total matches: **{m}**\n"
+            f"- {a} wins: **{wA}**\n"
+            f"- {b} wins: **{wB}**\n"
+        )
+
+
+    def _nl_momentum(res):
+        return (
+            f"Momentum worm chart for **{res.get('teamA')} vs {res.get('teamB')}**.\n"
+            "It shows over-by-over scoring progression for both teams."
+        )
+
+
+    def _nl_phase(res):
+        phases = ", ".join(res.get("phases", {}).keys())
+        return (
+            f"Phase-wise dominance analysis for **{res.get('teamA')} vs {res.get('teamB')}**.\n"
+            f"Available phases: {phases}"
+        )
+
+
+    def _nl_threat(res):
+        return (
+            f"Bowling threat map for **{res.get('team')}**.\n"
+            "It highlights wicket probability and pressure across phases."
+        )
+
+
+    def _nl_partnership(res):
+        if "error" in res:
+            return res["error"]
+
+        match_id = res.get("match_id")
+        count = len(res.get("nodes", []))
+        return (
+            f"Partnership graph for match **{match_id}**.\n"
+            f"Total batting pairs: **{count}**."
+        )
+
+
+    def _nl_pressure(res):
+        overs = len(res.get("over", []))
+        return (
+            f"Pressure progression across **{overs} overs** for match **{res.get('match_id')}**."
+        )
+
+
+    def _nl_winprob(res):
+        overs = len(res.get("over", []))
+        return (
+            f"Win-probability timeline across **{overs} overs** for match **{res.get('match_id')}**."
+        )
+
+
+    RAW_NL = {
+        "team_head_to_head": _nl_h2h,
+        "team_momentum": _nl_momentum,
+        "team_phase_dominance": _nl_phase,
+        "team_threat_map": _nl_threat,
+        "partnership_graph": _nl_partnership,
+        "pressure_series": _nl_pressure,
+        "win_probability_series": _nl_winprob,
+    }
+
+    # --------------------------------------------------------
     # 1.5️⃣ RAW ANALYTICS TOOLS → SKIP LLM (avoid JSON crash)
     # --------------------------------------------------------
     RAW_DATA_TOOLS = {
@@ -115,11 +194,16 @@ Write the message:
         "win_probability_series",
     }
 
-    if action in RAW_DATA_TOOLS:
-        return (
-            f"Here is the {action.replace('_', ' ')} data you requested. "
-            f"You can also use the --plot option to generate a visualization."
-        )
+    # --------------------------------------------------------
+    # Use our natural-language summaries for raw analytics tools
+    # --------------------------------------------------------
+    if action in RAW_NL:
+        try:
+            # These tools store their data inside "data", except H2H & partnership
+            data = result.get("data", result)
+            return RAW_NL[action](data)
+        except Exception:
+            return f"Here is the {action.replace('_',' ')} data."
 
     # --------------------------------------------------------
     # 2️⃣ STRUCTURED OUTPUT (ALL TOOL TYPES)
