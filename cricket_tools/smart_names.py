@@ -10,8 +10,16 @@ from sentence_transformers import SentenceTransformer, util
 
 # ---------------------------------------------------------------------
 # Paths
-CSV_PATH = Path("data/processed/player_names.csv")
-PARQUET_PATH = Path("data/processed/ipl_deliveries.parquet")
+#CSV_PATH = Path("data/processed/player_names.csv")
+#PARQUET_PATH = Path("data/processed/ipl_deliveries.parquet")
+
+# ---------------------------------------------------------------------
+# Paths (resolved relative to the package → works on Streamlit & locally)
+BASE_DIR = Path(__file__).resolve().parent      # cricket_tools/
+ROOT_DIR = BASE_DIR.parent                      # project root
+
+CSV_PATH = ROOT_DIR / "data" / "processed" / "player_names.csv"
+PARQUET_PATH = ROOT_DIR / "data" / "processed" / "ipl_deliveries.parquet"
 
 # ---------------------------------------------------------------------
 # Global semantic thresholds (balanced)
