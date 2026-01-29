@@ -229,8 +229,10 @@ class SmartNameResolver:
         ds_name = self.df.loc[self.df["canonical_name"] == best_name, "dataset_name"].values[0]
         best = Candidate(ds_name, best_name, best_sim * 100, [method])
         alt_names = [n for n, _ in sem_list[1:4] if n != best_name]
-        hint = f"Did you mean **{best_name}**?{f' Or maybe: {", ".join(alt_names)}' if alt_names else ''}."
-        
+        #hint = f"Did you mean **{best_name}**?{f' Or maybe: {", ".join(alt_names)}' if alt_names else ''}."
+        alt_part = f" Or maybe: {', '.join(alt_names)}" if alt_names else ""
+        hint = f"Did you mean **{best_name}**?{alt_part}."
+
         return ResolveResult("confirm", method, best, [best], hint)
 
     # ----------------------------------------------------------
