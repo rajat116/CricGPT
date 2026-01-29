@@ -9,13 +9,14 @@ rapidfuzz
 python-dotenv
 jellyfish
 metaphone
-sentence-transformers
+sentence-transformers<5
 xgboost
 
 # Agentic / LLM (added later)
 openai
-streamlit
-altair<5
+streamlit>=1.30
+torch>=2.2
+transformers<5
 fastapi
 uvicorn
 faiss-cpu
