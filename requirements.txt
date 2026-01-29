@@ -11,11 +11,11 @@ jellyfish
 metaphone
 sentence-transformers
 xgboost
-streamlit
 
 # Agentic / LLM (added later)
 openai
 streamlit
+altair<5
 fastapi
 uvicorn
 faiss-cpu
